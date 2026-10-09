@@ -4,6 +4,7 @@ img/
 img_to_pdf/
 output/
 First Semester All＿電子工学実験.pdf
+IE3_exp*/IE3_exp*_A4.pdf
 
 # Keep PDFs and ignore auxiliary build files.
 **/build/*
