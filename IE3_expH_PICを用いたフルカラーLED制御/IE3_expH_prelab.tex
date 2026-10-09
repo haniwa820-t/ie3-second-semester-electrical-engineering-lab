@@ -6,19 +6,58 @@
 \newcommand{\SourcePdf}{IE3_expH_A4.pdf}
 \begin{document}
 \prelabtitle
-\section{負論理と混色}
+\documentmap{
+\tocrow{sec:auto1}{1 用語を一つずつ理解する}{言葉の意味、単位、回路や測定での役割を確認する。}
+\tocrow{sec:auto2}{2 電流の経路とPWMをたどる}{部品と信号の経路を追い、状態が変化する理由を理解する。}
+\tocrow{sec:auto3}{3 負論理と混色}{LOWで点灯する三色と加法混色を読む。}
+\tocrow{sec:auto4}{4 電流制限の設計例}{順方向電圧・抵抗・電流の関係を計算する。}
+\tocrow{sec:auto5}{5 PWMの計算}{周期とLOW時間から点灯割合を求める。}
+\tocrow{sec:auto6}{6 PICの設定を読む}{方向、アナログ機能、比較器、発振器を設定する。}
+\tocrow{sec:auto7}{7 測定からレポートへ：LOW区間を読む}{実測値から計算・作図・記述へ進む順序を例題で練習する。}
+\tocrow{sec:auto8}{8 確認問題}{自分で計算・説明して、実験に必要な理解を確かめる。}
+\tocrow{sec:auto9}{解答の目安}{数値と理由を照合し、単位や論理の取り違えを見直す。}
+\tocrow{sec:auto10}{補足資料}{メーカー公式資料で方式・端子・動作条件を確認する。}
+\tocrow{sec:prelabsource}{準備・出典}{持参物と資料を確認し、具体的な質問を準備する。}
+}
+
+\section{用語を一つずつ理解する}\label{sec:auto1}
+\begin{terms}
+\term{GPIO・方向設定}{プログラムから入出力できる端子。TRISの設定で方向を選ぶが、すべての端子が出力可能とは限らない。PIC12F683のGP3は入力専用。}
+\term{共通アノード}{RGB三色の正側が共通のLED。本回路では5 V側へつなぎ、各負側をLOWにして点灯させる。}
+\term{シンクとソース}{端子へ電流を吸い込む動作がシンク、端子から送り出す動作がソース。共通アノードの点灯ではGPIOがシンク側となる。}
+\term{順方向電圧と抵抗}{LEDが光る時の電圧降下と、残りの電圧から電流を制限する抵抗。色で順方向電圧が異なるので同じ抵抗でも同じ電流とは限らない。}
+\term{PWM}{一定周期のON時間の割合で平均的な出力を変える方式。各ON期間の電流を低くする方法とは異なる。}
+\term{点灯割合}{この負論理回路ではLOW時間/周期。計器のHIGHデューティ表示をそのまま明るさの割合として使わない。}
+\term{加法混色}{三色の光を重ねる混色。赤と緑で黄、緑と青で水色、赤と青で紫となるが、実際の色味は各色の光量で変わる。}
+\end{terms}
+\section{電流の経路とPWMをたどる}\label{sec:auto2}
+\subsection{LOWで光る理由}
+共通アノード5 Vから、色のLEDと抵抗を通ってGPIOへ電流が流れる。
+GPIOをLOWにすれば電圧差が生じて点灯し、HIGHにすれば両側の電位差が小さくなり消灯する。
+抵抗は平均電流だけでなく点灯中の瞬時電流を制限する。PWMの割合が小さくても抵抗を省略しない。
+\subsection{初期設定が必要な理由}
+GPIOにしたい端子がアナログ入力や比較器の機能のままだと、期待したデジタル動作にならない。
+ANSELとCMCON0、TRISIOを資料に従って設定する。
+発振器4 MHzの設定と遅延計算の周波数指定をそろえる。ソフトの遅延だけを変えて発振器を未確認にすると、全体の時間がずれる。
+\subsection{一周期と色の段階を分ける}
+PWM一周期では、各色をONにする時間とOFFにする時間を繰り返す。
+一秒ごとの段階変更は、その周期を何度も繰り返した後に点灯割合を変更する動作。
+赤から緑へは赤の割合を減らし緑を増やすなど、二色の割合を同時に扱う。
+人の明るさの感覚は平均電流と単純な比例ではないため、等間隔の割合が等間隔の明るさに見えるとは限らない。
+
+\section{負論理と混色}\label{sec:auto3}
 RGBは加法混色である。共通アノードを5 V側に接続し、出力がLOWの色に電流が流れる。
 \par\noindent\begin{tabularx}{\linewidth}{YYYY}
 \toprule GP2 GP1 GP0 & 理論色 & GP2 GP1 GP0 & 理論色\\\midrule
 000&白&001&水色\\010&紫&011&青\\100&黄&101&緑\\110&赤&111&消灯\\\bottomrule
 \end{tabularx}
 実際の色味は各LEDの光量と電流で変わる。
-\section{電流制限の設計例}
+\section{電流制限の設計例}\label{sec:auto4}
 $R=(5-V_F)/0.020$より、赤は$150\,\Omega$、緑・青は$80\,\Omega$となる。
 緑・青で標準値$82\,\Omega$を使う例では、理想計算で約19.5 mAである。
 これは指定条件の練習であり、実験ボードの抵抗値は別に確認する。
 \note{データシートの絶対最大定格は通常動作の目標値ではない。1端子だけでなく全体の電流制限、出力電圧も確認する。大きな電流には外部駆動回路を検討する。}
-\section{PWMの計算}
+\section{PWMの計算}\label{sec:auto5}
 \[
  D_{\rm on}=\frac{t_{\rm LOW}}T,\qquad
  I_{\rm avg}\simeq D_{\rm on}I_{\rm on},\qquad f_{\rm PWM}=\frac1T.
@@ -26,7 +65,7 @@ $R=(5-V_F)/0.020$より、赤は$150\,\Omega$、緑・青は$80\,\Omega$とな�
 例：$T=10\,\mathrm{ms},t_{\rm LOW}=6\,\mathrm{ms}$なら100 Hz、点灯割合60\%。
 これは平均電流の近似であり、人が感じる明るさと完全な比例を保証しない。
 \clearpage
-\section{PICの設定を読む}
+\section{PICの設定を読む}\label{sec:auto6}
 \begin{itemize}
 \item TRISIO：0を指定した使用可能端子を出力にする。GP3は入力専用。
 \item ANSEL：使用端子のアナログ機能を無効にしてデジタルI/Oとして使う。
@@ -35,17 +74,32 @@ $R=(5-V_F)/0.020$より、赤は$150\,\Omega$、緑・青は$80\,\Omega$とな�
 \end{itemize}
 3色の混色では、赤から緑へ移る区間で赤を減らし緑を増やすなど、二色を同時に調光する。
 一周期内の出力更新時間もPWMの周期に含まれる。
-\section{確認問題}
+\section{測定からレポートへ：LOW区間を読む}\label{sec:auto7}
+\subsection{ポート表の読み方}
+GP2 GP1 GP0が101なら、青OFF・緑ON・赤OFFなので緑。
+0を「消灯」と思い込まず、各ビットを色に一つずつ対応させる。
+理論予想色と実際の観測色を別の列にし、色味の違いは電流・光量も候補として記録する。
+\subsection{波形から点灯割合}
+仮の波形で周期10 ms、LOWが6 ms、HIGHが4 msなら点灯割合60\%、HIGH割合40\%。
+最大輝度ではLOWが連続して出る設計もあり、その場合に通常のパルス周期を読み取れるとは限らない。GPIOの電圧レベルと実装した分岐を確認する。
+3段階目のLOW時間、周期、倍率を記録し、設計した点灯割合と比較する。
+\subsection{抵抗計算の前提}
+電源5 V、赤$V_F=2.0\,\mathrm{V}$、抵抗150 $\Omega$なら理想計算で20 mA。
+GPIOのLOW電圧、LEDの公差、実際の抵抗を含めれば電流は変わる。
+絶対最大定格は通常動作の目標ではなく、端子単独と全体の制限を両方確認する。
+
+\clearpage
+\section{確認問題}\label{sec:auto8}
 \begin{enumerate}
 \item GP2 GP1 GP0が110のとき点灯する色は何か。\answerline
 \item 周期10 ms、LOW時間2 msの点灯割合を求める。\answerline
 \item 5 V、$V_F=2.0\,\mathrm{V},R=330\,\Omega$の電流を近似する。\answerline
 \item HIGH時間を長くすると、この回路のLEDは明るくなるか。\answerline
 \end{enumerate}
-\section*{解答の目安}
+\section*{解答の目安}\label{sec:auto9}
 (1) 赤。(2) 20\%。(3) 約9.09 mA（GPIOの電圧降下は無視）。
 (4) LOW時間が減れば暗くなる。
-\section*{補足資料}
+\section*{補足資料}\label{sec:auto10}
 Microchip, \textit{PIC12F683 Data Sheet}, GPIO・電気的特性：
 \url{https://ww1.microchip.com/downloads/en/DeviceDoc/41211D_.pdf}
 （参照日：2026-10-09）。

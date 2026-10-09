@@ -4,11 +4,24 @@
 \newcommand{\LabCode}{J}
 \newcommand{\LabTitle}{PLCによるシーケンス制御}
 \newcommand{\SourcePdf}{IE3_expJ_A4.pdf}
+\newcommand{\ConclusionGuide}{接点論理、操作履歴、時間、回数の四種類を、対応する確認表とラダー図に結び付けて要約する。
+停止優先と初期化、タイマの途中取消し、カウンタのリセットを確認したか明記し、未試験の同時入力・短パルス条件を残す。\par}
 \begin{document}
-\reportcover\reflection
-\section{目的}
+\reporttitle
+\documentmap{
+\tocrow{sec:auto1}{1 目的}{ラダー論理と操作履歴による制御を実験で確かめる。}
+\tocrow{sec:auto2}{2 原理}{ラダー論理と操作履歴による制御の仕組みと成立条件を整理する。}
+\tocrow{sec:auto3}{3 装置・割付}{機器・定数・測定点を確認し、資料の順序で操作する。}
+\tocrow{sec:auto4}{4 方法}{機器・定数・測定点を確認し、資料の順序で操作する。}
+\tocrow{sec:auto5}{5 結果}{接点の状態、起動停止、時間・回数の境界を表や図に記録する。}
+\tocrow{sec:auto6}{6 考察：結果を根拠に説明する}{接点の状態、起動停止、時間・回数の境界を根拠に、比較と原因の検討を進める。}
+\tocrow{sec:closing}{7 結論のまとめ方}{主要な結果、成立範囲、未確認の条件を短くまとめる。}
+\tocrow{sec:references}{参考文献}{使用した資料と外部の根拠を示す。}
+}
+
+\section{目的}\label{sec:auto1}
 PLCで接点論理、自己保持、内部リレー、タイマ、カウンタを実装し、ラダー図と入出力の対応を理解する。ベルトコンベヤ等のシーケンスを確認する。
-\section{原理}
+\section{原理}\label{sec:auto2}
 PLCは入力を取り込み、ラダープログラムを順に実行し、出力を更新する処理を繰り返す。
 ラダーのa接点はビットが1なら成立、b接点は0なら成立する。
 物理スイッチのNO/NCとプログラムのa/bを区別する。
@@ -18,7 +31,7 @@ PLCは入力を取り込み、ラダープログラムを順に実行し、出�
  Q_{\rm next}=(S\lor Q_{\rm prev})\land\lnot R
 \]
 と表せる。開始と停止が同時に成立する場合も検討する。
-\section{装置・割付}
+\section{装置・割付}\label{sec:auto3}
 OMRON CP1L-L14DR-D、CX-Programmer、24 V電源、スイッチ、ランプ、ベルトコンベヤを使用する。
 \par\noindent\begin{tabularx}{\linewidth}{YYYY}
 \toprule 入力 & アドレス & 出力 & アドレス\\\midrule
@@ -27,7 +40,7 @@ SW3（a）&0.02&L3&100.02\\SW4（b）&0.03&ベルト&100.03\\\bottomrule
 \end{tabularx}
 実際の配線図、端子COM、ソフト版、機器番号：
 \writing{18mm}
-\section{方法}
+\section{方法}\label{sec:auto4}
 \begin{enumerate}
 \item 電源OFFで配線し、指定の線色（赤24 V、青GND、黄その他）と端子を確認する。一端子に2本を超えて接続しない。
 \item OnOffで物理a/bスイッチとラダーa/b接点の4組を試す。LogicでAND、OR、NOTを試す。
@@ -37,7 +50,7 @@ SW3（a）&0.02&L3&100.02\\SW4（b）&0.03&ベルト&100.03\\\bottomrule
 \item TimerでSW1操作から3秒後に動作し、途中のSW2で取消す。CounterでSW1を3回操作すると動作し、SW2でリセットする。
 \end{enumerate}
 \clearpage
-\section{結果}
+\section{結果}\label{sec:auto5}
 表1：物理接点とプログラム接点。操作前後の入力ビットと出力を記す。
 \par\noindent\begin{tabularx}{\linewidth}{YYYY}
 \toprule 物理接点 & ラダー接点 & 非操作時 & 操作時\\\midrule
@@ -71,7 +84,24 @@ a&a&&\\a&b&&\\b&a&&\\b&b&&\\\bottomrule
 \writing{42mm}
 図2：自己保持、タイマ、カウンタの入力・出力時系列。
 \writing{35mm}
-\section{考察・課題}
+\clearpage\section{考察：結果を根拠に説明する}\label{sec:auto6}
+\guidepoint{物理接点とラダー論理}
+{スイッチの操作、入力ビット、a/b命令の成立が対応しているか。}
+{表1の四組、入力LED・オンラインモニタ、AND/OR/NOTと駐車場の表。}
+{物理接点→入力値→命令成立→出力の四段階で説明する。駐車場では「少なくとも一室空き」と「全室空き」を区別する。}
+\guidepoint{自己保持と停止優先}
+{起動後の保持、停止、同時入力時の動作が仕様通りか。}
+{ラダー図、操作時系列、起動・停止同時の試験、出力状態。}
+{停止優先式と開始優先式を示し、接点の位置に対応させる。実際のプログラムでどちらを採用したかを観測で確かめる。}
+\guidepoint{内部リレーの履歴}
+{別々に行ったSW1・SW2の操作を保持し、SW3で両方解除できるか。}
+{操作順ごとのWビットと出力、IntRelayのラダー、リセット後の試験。}
+{現在入力と過去の履歴を分けて説明する。順序を変えた試験を示し、初期化条件が一致していることを確認する。}
+\guidepoint{時間・回数とスキャン}
+{3秒後、3回目、途中取消し、リセット後の境界が正しいか。}
+{TIM/CNT設定、表4、オンラインモニタ、入力のエッジ・出力時刻。}
+{保持時間と計数回数を区別し、計時の分解能やスキャン遅延を考慮する。同じコイルの複数書込みや短い入力を検討する場合は、実行順・波形を根拠にする。}
+\subsection{資料の課題・追加検討}
 \begin{enumerate}
 \item 自己保持が記憶として働く理由と、内部リレーを用いる意味を説明する。
 \item 停止接点の位置を変えた場合の同時入力を比較し、停止優先と開始優先を論理式で示す。

@@ -4,11 +4,24 @@
 \newcommand{\LabCode}{B}
 \newcommand{\LabTitle}{共振回路}
 \newcommand{\SourcePdf}{IE3_expB_A4.pdf}
+\newcommand{\ConclusionGuide}{直列と並列について$f_0,\Delta f,Q_{\rm BW}$を条件とともに並べる。どちらの量がピークだったか、理論との差はどの程度かを結論に含める。
+鋭さの比較は同じ測定・負荷条件に基づいて行い、素子誤差や損失を測っていない場合は原因を確定しない。\par}
 \begin{document}
-\reportcover\reflection
-\section{目的}
+\reporttitle
+\documentmap{
+\tocrow{sec:auto1}{1 目的}{LCの周波数応答と共振の鋭さを実験で確かめる。}
+\tocrow{sec:auto2}{2 原理}{LCの周波数応答と共振の鋭さの仕組みと成立条件を整理する。}
+\tocrow{sec:auto3}{3 装置・条件}{機器・定数・測定点を確認し、資料の順序で操作する。}
+\tocrow{sec:auto4}{4 方法}{機器・定数・測定点を確認し、資料の順序で操作する。}
+\tocrow{sec:auto5}{5 測定結果}{周波数曲線、半値点、幅とQを表や図に記録する。}
+\tocrow{sec:auto6}{6 考察：結果を根拠に説明する}{周波数曲線、半値点、幅とQを根拠に、比較と原因の検討を進める。}
+\tocrow{sec:closing}{7 結論のまとめ方}{主要な結果、成立範囲、未確認の条件を短くまとめる。}
+\tocrow{sec:references}{参考文献}{使用した資料と外部の根拠を示す。}
+}
+
+\section{目的}\label{sec:auto1}
 直列および並列のRLC回路の周波数特性を測定し、共振周波数、共振の鋭さ、半値幅の関係を確かめる。
-\section{原理}
+\section{原理}\label{sec:auto2}
 直列回路のインピーダンスと共振条件は
 \[
  Z=r+j\left(\omega L-\frac1{\omega C}\right),\qquad
@@ -22,7 +35,7 @@
  \omega_{0p}^2=\frac1{LC}-\frac{r^2}{L^2}.
 \]
 高$Q$では並列共振時のインピーダンスはおよそ$\omega_0^2L^2/r$となる。
-\section{装置・条件}
+\section{装置・条件}\label{sec:auto3}
 \par\noindent\begin{tabularx}{\linewidth}{lYY}
 \toprule & 直列共振 & 並列共振\\\midrule
 $L,C$ & $50\,\mathrm{mH},\ 0.02\,\mu\mathrm{F}$ & 同左\\
@@ -33,14 +46,14 @@ $L,C$ & $50\,\mathrm{mH},\ 0.02\,\mu\mathrm{F}$ & 同左\\
 発振器、オシロスコープ、周波数計、部品の型番・実測値・使用レンジ：
 \writing{14mm}
 \clearpage
-\section{方法}
+\section{方法}\label{sec:auto4}
 \begin{enumerate}
 \item 資料の測定回路を配線し、共振回路端子電圧$e_a$と測定抵抗電圧$e_b$を観測する。接続図とプローブの位置を記録する。
 \item 周波数を変え、共振点付近では間隔を細かくする。出力振幅を確認しながら$e_a,e_b$と周波数を記録する。
 \item $|Z|=R|e_a|/|e_b|$、$|Y|=|e_b|/(R|e_a|)$を求める。双方の電圧は同じ定義（実効値または振幅）で測定する。
 \item 直列では$|Y|$、並列では$|Z|$を縦軸、周波数を対数横軸とする。ピークの$1/\sqrt2$の点から半値幅を求める。
 \end{enumerate}
-\section{測定結果}
+\section{測定結果}\label{sec:auto5}
 表1：直列共振（不足行は追加する）。
 \par\noindent\begin{tabularx}{\linewidth}{YYYYY}
 \toprule $f$ / Hz & $e_a$ / V & $e_b$ / V & $|Z|$ / $\Omega$ & $|Y|$ / S\\\midrule
@@ -61,7 +74,24 @@ $L,C$ & $50\,\mathrm{mH},\ 0.02\,\mu\mathrm{F}$ & 同左\\
 \toprule 回路 & $f_0$/Hz & $f_1,f_2$/Hz & 半値幅/Hz & $Q$\\\midrule
 直列 & & & &\\並列 & & & &\\\bottomrule
 \end{tabularx}
-\section{考察・課題}
+\clearpage\section{考察：結果を根拠に説明する}\label{sec:auto6}
+\guidepoint{共振周波数の理論との比較}
+{直列・並列のピーク周波数が、理想LCの計算値からどの程度ずれるか。}
+{表1・2の測定点、図1・2のピーク、表3の$f_0$、実際のLとC。}
+{理論値と実測の定義を示して相対差を求める。並列では実コイル損失のある共振条件と理想条件の違いも検討する。Z最大点と虚部零の条件が完全に同じとは限らないことに注意する。}
+\guidepoint{二つの方法で求めるQ}
+{曲線の幅から得るQと、損失抵抗から見積もるQが一致するか。}
+{図の半値点、表3の幅、コイル抵抗測定値、発振器・プローブの条件。}
+{まず同じ回路モデルで比較する。直列損失rと測定用Rを区別し、外部負荷を含む幅であるか説明する。並列の幅によるQは回路・高Q近似の適用範囲も明記する。}
+\guidepoint{周波数間隔と半値点の読み取り}
+{測定点の間隔が広いことでピークや幅を取り逃がしていないか。}
+{半値点前後の実測周波数・振幅、グラフの対数目盛、再測定点。}
+{補間した点と実測点を区別する。読める周波数の幅を示し、Qがその範囲でどの程度変わるかを見積もる。追加測定していなければ、その必要性を改善案にする。}
+\guidepoint{ピーク量と損失の物理的意味}
+{直列でY、並列でZがピークになる理由と、有限の高さとなる理由。}
+{二曲線の形、ピーク値、損失・負荷条件、端子電圧の変化。}
+{「流れやすい／流れにくい」を測る量に結び付けて説明する。直列の半値点は一定端子電圧・一定rなら損失電力が半分。並列では同じ電力説明を無条件に当てはめず、測ったZの指標として述べる。}
+\subsection{資料の課題・追加検討}
 \begin{enumerate}
 \item 半値幅から求めた$Q$と損失抵抗から求めた$Q$を比較し、差の原因を検討する。
 \item 直列共振で電流が$1/\sqrt2$となる条件から$\Delta f=f_0/Q$を導く。
