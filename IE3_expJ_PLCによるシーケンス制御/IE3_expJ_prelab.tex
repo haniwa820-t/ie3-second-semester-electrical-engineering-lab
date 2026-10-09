@@ -1,0 +1,61 @@
+% !TEX root = IE3_expJ_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{J}
+\newcommand{\LabTitle}{PLCによるシーケンス制御}
+\newcommand{\SourcePdf}{IE3_expJ_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{物理接点とラダー接点}
+物理a接点（NO）は操作すると閉じ、b接点（NC）は操作すると開く。
+一方、ラダーa接点は入力ビット1で、b接点は0で成立する。
+したがって物理b接点をラダーa接点で読むと、非操作時に成立し、操作時に不成立となる。
+\section{論理と自己保持}
+直列接点はAND、並列接点はOR、b接点はNOTに対応する。
+満車の入力をA,B,Cとすれば
+\[
+ L_3=A\land B\land C,\qquad L_1=\lnot(A\land B\land C).
+\]
+L1は「すべて空き」ではなく「少なくとも一室空き」である。
+\[
+ \text{停止優先： }Q'=(S\lor Q)\land\lnot R,\qquad
+ \text{開始優先： }Q'=S\lor(Q\land\lnot R).
+\]
+S=R=1のとき、前者は0、後者は1。停止条件の配置は動作仕様に直結する。
+\simpleflow{
+\node[box] (a) {入力取込み};
+\node[box,right=of a] (b) {上からプログラム\\実行};
+\node[box,right=of b] (c) {出力更新};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);
+}
+\section{タイマとカウンタ}
+資料のTIMは0.1秒単位で、\texttt{\#30}はBCDの30、すなわち3.0秒。
+CNTの\texttt{\#3}は3回の計数を設定する。
+立上りを3回発生させる必要があり、スイッチを押し続けることは3回操作と同じではない。
+\clearpage
+\section{履歴とスキャン}
+内部リレーWにSW1・SW2の履歴を保持すれば、操作順が逆でも両方を操作した事実を検出できる。
+SW3で両方を解除する。
+同じ出力コイルを複数段で書き換えると、実行順序で最後の結果が有効になる場合がある。ラダーとオンラインモニタを対応させる。
+初回スキャンフラグを使う場合は、初期化条件を明記する。
+\section{確認問題}
+\begin{enumerate}
+\item 物理NCスイッチを押したときの入力ビットと、それをラダーb接点で読んだ成立状態を答える。\answerline
+\item A=1,B=0,C=1の駐車場でL1、L3を求める。\answerline
+\item TIMの\texttt{\#25}は何秒か（0.1秒単位）。\answerline
+\item 停止優先の自己保持でS=R=1の場合の出力を求める。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) 入力は0、ラダーb接点は成立（指定の標準配線を仮定）。
+(2) L1=1、L3=0。(3) 2.5秒。(4) 0。
+\section*{実験前の配線確認}
+24 VのPLC入力と、リレー出力のCOM・負荷電源を区別する。
+通電前に端子の緩みを確認し、コンベヤの可動部に手を近づけない。
+プログラムの転送方向、オンライン状態、機器の型式を確認してから操作する。
+\section*{補足資料}
+OMRON, CP1L公式資料・マニュアル案内：
+\url{https://www.fa.omron.co.jp/products/family/1916/download/}
+（参照日：2026-10-09）。
+\prelabclosing
+\end{document}
+

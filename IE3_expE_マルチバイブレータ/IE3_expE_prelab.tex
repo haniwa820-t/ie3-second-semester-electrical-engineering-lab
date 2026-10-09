@@ -1,0 +1,55 @@
+% !TEX root = IE3_expE_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{E}
+\newcommand{\LabTitle}{マルチバイブレータ}
+\newcommand{\SourcePdf}{IE3_expE_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{RC充放電と状態}
+時定数$\tau=RC$に対して、コンデンサ電圧は
+\[
+ V_C(t)=V_\infty+(V_0-V_\infty)e^{-t/(RC)}
+\]
+と変化する。しきい値$V_{\rm th}$までの時間は
+$t=-RC\ln[(V_{\rm th}-V_\infty)/(V_0-V_\infty)]$。
+非安定には安定状態がなく、単安定には一つ、双安定には二つある。
+\section{555の時間計算}
+555はコンデンサ電圧が$2V_{CC}/3$に達すると放電し、$V_{CC}/3$で再び充電を始める。
+充放電で電圧差が半分になる時間は$RC\ln2$である。
+\[
+ t_H=0.693(R_A+R_B)C,\quad t_L=0.693R_BC,\quad
+ D=\frac{R_A+R_B}{R_A+2R_B}.
+\]
+\textbf{例題：}$R_A=5\,\mathrm{k}\Omega,R_B=3\,\mathrm{k}\Omega,C=0.1\,\mu\mathrm{F}$なら、
+$t_H=0.554\,\mathrm{ms},t_L=0.208\,\mathrm{ms}$、
+$f\simeq1.31\,\mathrm{kHz},D\simeq72.7\,\%$。
+単安定は0から$2V_{CC}/3$まで充電するため$t=\ln3R_AC\simeq1.099R_AC$。
+$5.6\,\mathrm{k}\Omega,0.1\,\mu\mathrm{F}$なら幅は約$0.616\,\mathrm{ms}$。
+\section{離散回路を読む}
+コレクタ電圧が低い側のトランジスタは通常ON、高い側はOFFとなる。ベース電圧、結合コンデンサ、微分入力を追って次の状態に移る理由を確認する。
+\writing{24mm}
+\clearpage
+\section{測定で区別する量}
+周期$T$は同じ向きの連続するエッジ間隔、パルス幅は一つの状態の持続時間である。
+デューティ比は高レベル時間$/T$であり、入力と出力で同じとは限らない。
+単安定では入力のパルス幅より出力が長くなる場合もあるが、再トリガや過長トリガの扱いは回路条件に依存する。
+\note{負電源を含む離散回路と5 Vの555回路を混同しない。配線変更は電源OFFで行い、電解コンデンサの極性を確認する。}
+\section{確認問題}
+\begin{enumerate}
+\item $R_B=75\,\mathrm{k}\Omega$で離散回路の$T_1=1\,\mathrm{ms},T_2=0.5\,\mathrm{ms}$となる$C_1,C_2$を求める（係数0.69）。\answerline
+\item 555の$5\,\mathrm{V}$電源における上下しきい値を求める。\answerline
+\item 単安定のRだけを2倍にしたら出力幅はどうなるか。\answerline
+\item なぜ充放電時間の式には$\ln2$や$\ln3$が現れるか。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) 約$19.3\,\mathrm{nF},9.66\,\mathrm{nF}$。
+(2) 約$3.33\,\mathrm{V},1.67\,\mathrm{V}$。
+(3) 理想近似では2倍。
+(4) 指数関数の充放電を、所定のしきい値に達する時間について解くため。
+\section*{補足資料}
+Texas Instruments, \textit{xx555 Precision Timers}：
+\url{https://www.ti.com/lit/ds/symlink/ne555.pdf}（参照日：2026-10-09）。
+\prelabclosing
+\end{document}
+

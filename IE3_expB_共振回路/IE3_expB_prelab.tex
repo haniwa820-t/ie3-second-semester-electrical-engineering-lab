@@ -1,0 +1,58 @@
+% !TEX root = IE3_expB_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{B}
+\newcommand{\LabTitle}{共振回路}
+\newcommand{\SourcePdf}{IE3_expB_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{交流回路で必要な知識}
+$\omega=2\pi f$、$Z_R=R$、$Z_L=j\omega L$、$Z_C=1/(j\omega C)$。
+直列では$Z$を加え、並列では$Y=1/Z$を加える。
+正弦波では$V_{\mathrm{rms}}=V_{\mathrm{pp}}/(2\sqrt2)$であり、電圧比では同じ測定定義を用いる。
+\begin{center}
+\begin{circuitikz}
+\draw (0,0) to[sV,l=$v$] (0,2) to[R,l=$r$] (2,2)
+ to[L,l=$L$] (4,2) to[C,l=$C$] (6,2) -- (6,0) -- (0,0);
+\end{circuitikz}
+\end{center}
+\section{直列共振}
+リアクタンスが打ち消し合うと$Z=r$となり、一定の端子電圧に対する電流が最大になる。
+\[
+ f_0=\frac1{2\pi\sqrt{LC}},\quad Q=\frac{2\pi f_0L}{r},\quad
+ \Delta f=\frac{f_0}{Q}.
+\]
+\textbf{例題：}$L=50\,\mathrm{mH},C=0.02\,\mu\mathrm{F}$なら$f_0\simeq5033\,\mathrm{Hz}$。
+仮に$r=20\,\Omega$なら$Q\simeq79.1$、$\Delta f\simeq63.7\,\mathrm{Hz}$。
+これは理論例であり、実際のコイル損失を測定した値ではない。
+\section{測定値の処理}
+測定抵抗を$R$として$I=e_b/R$から
+\[
+ |Z|=R\frac{|e_a|}{|e_b|},\qquad |Y|=\frac{|e_b|}{R|e_a|}.
+\]
+信号源内部抵抗やプローブ負荷も周波数特性に影響する。ピーク付近で周波数を細かく取り、測定点を記録する。
+\clearpage
+\section{並列共振と半値幅}
+理想的な並列LCでは共振時にアドミタンスが零になるが、実コイルの損失でインピーダンスは有限になる。
+直列抵抗$r$を含むコイルと$C$の並列回路の共振条件は
+\[
+ \operatorname{Im}Y=0,\qquad \omega_{0p}^2=\frac1{LC}-\frac{r^2}{L^2}.
+\]
+並列のピークでは$|Z|$、直列のピークでは$|Y|$の$1/\sqrt2$点を探す。
+これは電力がピークの半分になることに対応する。
+\note{理想並列RLCの並列抵抗を使う$Q$の式と、コイルの直列損失抵抗を使う式を混同しない。}
+\section{確認問題}
+\begin{enumerate}
+\item $R=5\,\Omega,e_a=2.0\,\mathrm{V},e_b=0.4\,\mathrm{V}$の$|Z|,|Y|$を求める。\answerline
+\item ピーク値が$0.1\,\mathrm{S}$なら半値点の$|Y|$はいくらか。\answerline
+\item $800\,\mathrm{mH},200\,\mathrm{pF},Q=50$の$f_0,\Delta f$を求める。\answerline
+\item 共振点付近で測定間隔を大きくすると、$Q$の推定にどのような影響があるか。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) $25\,\Omega,\ 0.040\,\mathrm{S}$。
+(2) $0.0707\,\mathrm{S}$。
+(3) 約$12.58\,\mathrm{kHz},251.6\,\mathrm{Hz}$。
+(4) ピークや半値点を取り逃がし、半値幅と$Q$の推定誤差が大きくなる。
+\prelabclosing
+\end{document}
+

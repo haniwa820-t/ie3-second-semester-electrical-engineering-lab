@@ -3,3 +3,17 @@
 img/
 img_to_pdf/
 output/
+First Semester All＿電子工学実験.pdf
+
+# Keep PDFs and ignore auxiliary build files.
+**/build/*
+!**/build/*.pdf
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+__pycache__/
+*.py[cod]

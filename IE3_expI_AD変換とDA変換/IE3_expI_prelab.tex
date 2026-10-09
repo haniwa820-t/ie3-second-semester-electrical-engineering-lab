@@ -1,0 +1,56 @@
+% !TEX root = IE3_expI_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{I}
+\newcommand{\LabTitle}{A/D変換とD/A変換}
+\newcommand{\SourcePdf}{IE3_expI_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{量子化と符号}
+A/Dは連続電圧を離散符号へ、D/Aは符号をアナログ値へ変換する。
+5 Vスケールで3ビットなら$2^3=8$段階、LSBは0.625 V。
+8ビットなら256段階、LSBは約19.53 mVである。
+理想的な四捨五入量子化の誤差は最大半LSBだが、実際の符号境界・オフセットは方式とデータシートに従う。
+\[
+ V_o=5\frac D{2^n},\quad V_{o,\max}=5\left(1-\frac1{2^n}\right).
+\]
+最大値は3ビットで4.375 V、8ビットで4.98047 V。
+\section{R--2Rと変換方式}
+R--2Rラダーは2種類の抵抗で重み付き和を作る。
+3ビットなら$V_o=5(b_2/2+b_1/4+b_0/8)$と表せる。
+入力101は3.125 Vになる。
+並列比較形は複数しきい値を同時比較する。逐次比較形はDACと比較器で上位ビットから判定する。
+資料の3ビット回路は前者、ADC0804は後者である。
+\section{サンプリングの前提}
+標本間隔$T_s=1/f_s$。入力一周期の標本数は$f_s/f_{\rm in}$。
+理想的に帯域制限された信号の再構成条件は$f_s>2f_{\max}$。
+実回路ではアンチエイリアスフィルタ、変換時間、保持、再構成フィルタも関係する。
+\clearpage
+\section{折返しの例}
+観測帯域$0$〜$f_s/2$に入るよう整数kを選んだ
+\[
+ f_{\rm alias}=|f_{\rm in}-kf_s|
+\]
+が折返し周波数になる。
+50 Hz入力を60 Hzで標本化すると10 Hz、110 Hz入力を80 Hzで標本化すると30 Hzに見える。
+階段波形を単に滑らかに見せることと、元信号を復元できることは異なる。
+\section{サンプルホールド}
+スイッチがONの取得期間でコンデンサを入力に追従させ、OFFの保持期間で値を保持する。
+100 Hz入力と50 Hz・20\%デューティのパルスなら、パルス周期20 ms、指定レベルの期間4 msとなる。実際の取得極性は回路で確認する。
+\section{確認問題}
+\begin{enumerate}
+\item 3ビットの110の理想DAC出力を求める。\answerline
+\item 8ビットの80hとFFhの理想出力を求める。\answerline
+\item 入力50 Hz、サンプリング500 Hzの一周期あたり標本数を求める。\answerline
+\item 110 Hzを80 Hzで標本化すると、再構成条件を満たすか。折返し周波数も答える。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) 3.75 V。(2) 2.5 V、約4.9805 V。(3) 10。
+(4) 満たさない、30 Hz。
+\section*{補足資料}
+Texas Instruments, \textit{ADC080x 8-Bit, $\mu$P-Compatible ADCs}：
+\url{https://www.ti.com/lit/ds/symlink/adc0804-n.pdf}
+（参照日：2026-10-09）。
+\prelabclosing
+\end{document}
+

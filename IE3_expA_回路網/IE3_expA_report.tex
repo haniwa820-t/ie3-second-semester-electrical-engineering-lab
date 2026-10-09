@@ -1,0 +1,72 @@
+% !TEX root = IE3_expA_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{A}
+\newcommand{\LabTitle}{回路網}
+\newcommand{\SourcePdf}{IE3_expA_A4.pdf}
+\begin{document}
+\reportcover
+\reflection
+
+\section{目的}
+鳳・テブナンの定理、重ねの理、相反定理を実測により確かめ、各定理の適用条件と測定器の影響を理解する。
+\section{原理}
+\subsection{鳳・テブナンの定理}
+線形回路網を端子から見ると、開放端子電圧 $V_{\rm th}$ の電圧源と等価抵抗 $R_{\rm th}$ の直列回路に置き換えられる。
+回路網Bの抵抗を $R_B$、電流計の内部抵抗を $r_A$ とすると、
+\begin{equation} I_{\rm th}=\frac{V_{\rm th}}{R_{\rm th}+R_B+r_A}.\label{eq:th}\end{equation}
+独立電圧源の作用を除くときは、電源を外してその接続点を短絡する。通電中の電源出力を直接短絡する操作とは区別する。
+\subsection{重ねの理と相反定理}
+複数電源がある線形回路では、同じ基準方向の電流・電圧について
+\begin{equation}I=I_1+I_2,\qquad V=V_1+V_2\end{equation}
+が成り立つ。理想電圧源をゼロにすると短絡、理想電流源をゼロにすると開放になる。
+線形かつ双方向性をもつ抵抗回路では、電源位置と電流観測位置を交換したときの伝達関係が等しい。
+資料A-2.4の補償定理は抵抗変化による電流変化を等価起電力で扱う考え方であり、今回の実測項目はA-3.1〜A-3.3である。
+\section{使用器具}
+直流電源2台、直流電圧計、直流電流計、可変抵抗器、検流計、ホイートストンブリッジ用回路、回路網A・Bを使用する。
+\par\noindent\begin{tabularx}{\linewidth}{YYY}\toprule 器具 & 型番・個体番号 & レンジ・備考\\\midrule
+直流電源1／2&&\\電圧計／電流計&&\\抵抗測定回路・検流計&&\\回路網A／B&&\\\bottomrule\end{tabularx}
+\clearpage
+\section{実験方法}
+\subsection{鳳・テブナンの定理（資料A-3.1）}
+\begin{enumerate}
+\item 資料図A-6に従い、回路網Aの電源端子に $E=2,4,6,8,10$ Vを順に加え、負荷未接続時の電圧を測定する。
+\item 電源を外して電源接続点を短絡し、ブリッジで $R_{\rm th}$ を測定する。回路網Bの $R_B$ も測定する。ブリッジの電源は2〜3 Vとする。
+\item 図A-7のようにA・Bと電流計を接続し、同じ5条件で電流を測定する。電流計のレンジと内部抵抗は実機表示から記録する。
+\end{enumerate}
+\subsection{重ねの理（資料A-3.2）}
+$(E_1,E_2)=(2,5),(4,4),(6,3),(8,2),(10,1)$ Vを設定し、両電源接続時の $V,I$、
+$E_1$のみの $V_1,I_1$、$E_2$のみの $V_2,I_2$ を測定する。
+取り外した電源の接続点は短絡し、電圧極性・電流方向を統一する。
+\subsection{相反定理（資料A-3.3）}
+図A-9の2接続について、$E=2,4,6,8,10$ Vで電流 $I_a,I_b$ を測定する。
+電源と電流計を入れ替え、計器レンジを維持する。端子の緩みを確認する。
+\section{結果}
+\noindent $R_{\rm th}=$\blank $\Omega$，$R_B=$\blank $\Omega$，
+$r_A=$\blank $\Omega$，電流計レンジ：\blank
+\begin{table}[h]\centering\caption{テブナンの定理の測定と予測}
+\begin{tabular}{ccccc}\toprule $E$ [V]&$V_{\rm th}$ [V]&$I$ [mA]&$I_{\rm th}$ [mA]&誤差 [\%]\\\midrule
+2&&&&\\4&&&&\\6&&&&\\8&&&&\\10&&&&\\\bottomrule\end{tabular}\end{table}
+式\eqref{eq:th}では電流をAで計算した後にmAへ換算する。
+\clearpage
+\begin{table}[h]\centering\caption{重ねの理：符号を含む測定値}
+\begin{tabular}{cccccccc}\toprule $E_1$&$E_2$&$V$&$I$&$V_1$&$I_1$&$V_2$&$I_2$\\
+\relax [V]&[V]&[V]&[mA]&[V]&[mA]&[V]&[mA]\\\midrule
+2&5&&&&&&\\4&4&&&&&&\\6&3&&&&&&\\8&2&&&&&&\\10&1&&&&&&\\\bottomrule\end{tabular}\end{table}
+\noindent 残差 $\Delta V=V-(V_1+V_2)$，$\Delta I=I-(I_1+I_2)$：
+\writing{15mm}
+\begin{table}[h]\centering\caption{相反定理の確認}
+\begin{tabular}{cccc}\toprule $E$ [V]&$I_a$ [mA]&$I_b$ [mA]&$I_a-I_b$ [mA]\\\midrule
+2&&&\\4&&&\\6&&&\\8&&&\\10&&&\\\bottomrule\end{tabular}\end{table}
+\noindent 実際の接続図（資料図A-7、A-8、A-9を参考に測定方向を明示）：
+\writing{25mm}
+\section{考察・結果の整理}
+\begin{enumerate}
+\item 内部抵抗を含めた予測と含めない予測を比較し、計器の負荷効果を定量的に述べる。
+\item 重ねの理の残差を読取り誤差や抵抗・電源の変動と比較する。ゼロ付近では相対誤差だけで判断しない。
+\item 相反定理の成立を計器条件と測定の不確かさを含めて判断する。
+\end{enumerate}
+\writing{12mm}
+\reportclosing{3つの定理について、どの程度実測と一致したかをまとめる。}
+
+\end{document}

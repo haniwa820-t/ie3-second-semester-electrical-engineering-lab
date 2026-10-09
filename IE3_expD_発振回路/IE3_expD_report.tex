@@ -1,0 +1,55 @@
+% !TEX root = IE3_expD_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{D}
+\newcommand{\LabTitle}{LC発振回路}
+\newcommand{\SourcePdf}{IE3_expD_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+LC発振回路を組み立て、正帰還と発振条件を理解する。LとCを変えたときの発振周波数を測定し、理論値との関係と周波数の測定方法を比較する。
+\section{原理}
+増幅回路と帰還回路からなる系では、正弦波の持続発振に必要な条件は帰還ループの位相が$2\pi n$、定常時のループ利得の大きさが1となることである。起動時には利得に余裕が必要で、非線形性により振幅が制限される。
+Clapp形LC回路の近似周波数は
+\[
+ f_0=\frac1{2\pi\sqrt{LC_{\rm eq}}},\qquad
+ \frac1{C_{\rm eq}}=\frac1{C_1}+\frac1{C_2}+\frac1{C_3}.
+\]
+$C_1=C_2=C_3=C$なら$C_{\rm eq}=C/3$となる。
+ここで$C_3$は資料図D-4の$C_S$を表す。
+\section{装置・回路}
+電源$V_{CC}=12\,\mathrm{V}$、指定発振回路、校正された基準発振器、周波数計、オシロスコープを使用する。
+$L=1\,\mathrm{mH},470\,\mu\mathrm{H},200\,\mu\mathrm{H}$と、各コンデンサ$C=0.1,0.01,0.001\,\mu\mathrm{F}$の9組を扱う。
+実際の配線図、素子定数、機器番号を記す。
+\writing{25mm}
+\section{方法}
+\begin{enumerate}
+\item 資料の回路を組み立て、配線を短くし、不要な交差を避ける。電源投入前に結線を確認する。
+\item 最初は$L=1\,\mathrm{mH}$、各$C=0.01\,\mu\mathrm{F}$とし、$R_2$は固定する。帰還経路の可変抵抗$R_F$を調整して、安定したひずみの少ない正弦波を得る。調整値と波形を記録する。
+\item XY表示でCH1に基準発振器、CH2に実験回路を接続し、静止するリサージュ図から周波数比を読む。基準周波数と比を記録する。
+\item YT表示に戻し、周波数計で直接測定する。同じ手順を9組のL、Cについて行う。
+\end{enumerate}
+\clearpage
+\section{結果}
+表1：各L、Cの周波数比較。Cは$C_1=C_2=C_3$の各値。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule $L$/mH & $C$/$\mu$F & 理論/Hz & リサージュ/Hz & 周波数計/Hz\\\midrule
+1&0.1&&&\\1&0.01&&&\\1&0.001&&&\\
+0.47&0.1&&&\\0.47&0.01&&&\\0.47&0.001&&&\\
+0.20&0.1&&&\\0.20&0.01&&&\\0.20&0.001&&&\\\bottomrule
+\end{tabularx}
+図1：代表的な出力波形・リサージュ図。電圧、時間、基準周波数、周波数比を記入する。
+\writing{40mm}
+図2：理論周波数と実測周波数の両対数グラフ。L、Cの組合せと理論一致線を示す。
+\writing{40mm}
+\clearpage
+\section{考察・課題}
+\begin{enumerate}
+\item 各組の相対誤差$\eqerror$を求め、寄生容量、コイル損失、部品誤差、測定負荷の影響を検討する。
+\item 2種類の周波数測定の読みやすさと誤差を比較する。
+\item 発振回路の正帰還の経路を示す。資料の付録のFパラメータの電流方向を確認し、回路の関係式から発振条件を導く。
+\item Clapp回路で$C_3\ll C_1,C_2$とする意義を説明する。本実験の等容量条件との違いを明記する。
+\end{enumerate}
+\writing{25mm}
+\reportclosing{L、Cと周波数の関係、理論との差、帰還の役割をまとめる。}
+\end{document}

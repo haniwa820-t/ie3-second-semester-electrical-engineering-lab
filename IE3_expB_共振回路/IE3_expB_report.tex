@@ -1,0 +1,72 @@
+% !TEX root = IE3_expB_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{B}
+\newcommand{\LabTitle}{共振回路}
+\newcommand{\SourcePdf}{IE3_expB_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+直列および並列のRLC回路の周波数特性を測定し、共振周波数、共振の鋭さ、半値幅の関係を確かめる。
+\section{原理}
+直列回路のインピーダンスと共振条件は
+\[
+ Z=r+j\left(\omega L-\frac1{\omega C}\right),\qquad
+ f_0=\frac1{2\pi\sqrt{LC}},\qquad Q=\frac{\omega_0L}{r}
+      =\frac{f_0}{f_2-f_1}
+\]
+である。$r$にはコイルの損失など直列損失を含む。電流が最大値の$1/\sqrt2$になる周波数を$f_1,f_2$とする。
+実際のコイルを$r+j\omega L$で表した並列回路では
+\[
+ Y=j\omega C+\frac1{r+j\omega L},\qquad
+ \omega_{0p}^2=\frac1{LC}-\frac{r^2}{L^2}.
+\]
+高$Q$では並列共振時のインピーダンスはおよそ$\omega_0^2L^2/r$となる。
+\section{装置・条件}
+\par\noindent\begin{tabularx}{\linewidth}{lYY}
+\toprule & 直列共振 & 並列共振\\\midrule
+$L,C$ & $50\,\mathrm{mH},\ 0.02\,\mu\mathrm{F}$ & 同左\\
+測定用抵抗$R$ & $5\,\Omega$ & $5\,\mathrm{k}\Omega$\\
+発振器出力 & 実際の設定を記録 & $5\,\mathrm{V_{pp}}$\\
+\bottomrule
+\end{tabularx}
+発振器、オシロスコープ、周波数計、部品の型番・実測値・使用レンジ：
+\writing{14mm}
+\clearpage
+\section{方法}
+\begin{enumerate}
+\item 資料の測定回路を配線し、共振回路端子電圧$e_a$と測定抵抗電圧$e_b$を観測する。接続図とプローブの位置を記録する。
+\item 周波数を変え、共振点付近では間隔を細かくする。出力振幅を確認しながら$e_a,e_b$と周波数を記録する。
+\item $|Z|=R|e_a|/|e_b|$、$|Y|=|e_b|/(R|e_a|)$を求める。双方の電圧は同じ定義（実効値または振幅）で測定する。
+\item 直列では$|Y|$、並列では$|Z|$を縦軸、周波数を対数横軸とする。ピークの$1/\sqrt2$の点から半値幅を求める。
+\end{enumerate}
+\section{測定結果}
+表1：直列共振（不足行は追加する）。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule $f$ / Hz & $e_a$ / V & $e_b$ / V & $|Z|$ / $\Omega$ & $|Y|$ / S\\\midrule
+ & & & &\\ & & & &\\ & & & &\\ & & & &\\ & & & &\\ & & & &\\\bottomrule
+\end{tabularx}
+表2：並列共振。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule $f$ / Hz & $e_a$ / V & $e_b$ / V & $|Z|$ / $\Omega$ & $|Y|$ / S\\\midrule
+ & & & &\\ & & & &\\ & & & &\\ & & & &\\ & & & &\\ & & & &\\\bottomrule
+\end{tabularx}
+\clearpage
+図1：直列共振のアドミタンス曲線（測定点と半値点）。
+\writing{40mm}
+図2：並列共振のインピーダンス曲線（測定点と半値点）。
+\writing{40mm}
+表3：共振特性の整理。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule 回路 & $f_0$/Hz & $f_1,f_2$/Hz & 半値幅/Hz & $Q$\\\midrule
+直列 & & & &\\並列 & & & &\\\bottomrule
+\end{tabularx}
+\section{考察・課題}
+\begin{enumerate}
+\item 半値幅から求めた$Q$と損失抵抗から求めた$Q$を比較し、差の原因を検討する。
+\item 直列共振で電流が$1/\sqrt2$となる条件から$\Delta f=f_0/Q$を導く。
+\item $L=800\,\mathrm{mH},C=200\,\mathrm{pF},Q=50$の共振周波数と半値幅を計算する。結合回路の付録を扱った場合は結合度と曲線形状を整理する。
+\end{enumerate}
+\writing{25mm}
+\reportclosing{直列と並列でピークとなる量を明記し、共振周波数と$Q$を数値で要約する。}
+\end{document}

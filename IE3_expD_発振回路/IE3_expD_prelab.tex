@@ -1,0 +1,56 @@
+% !TEX root = IE3_expD_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{D}
+\newcommand{\LabTitle}{LC発振回路}
+\newcommand{\SourcePdf}{IE3_expD_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{発振と帰還}
+発振器は直流電源からエネルギーを受け取り、外部からの周期的入力なしに周期信号を生じる。
+ループ伝達関数を$A(j\omega)\beta(j\omega)$とすると、持続発振の必要条件は
+\[
+ |A\beta|=1,\qquad \arg(A\beta)=2\pi n.
+\]
+これは起動や振幅安定化まで保証する十分条件ではない。起動時の利得、飽和、バイアスも必要になる。
+\simpleflow{
+\node[box] (a) {増幅回路$A$};
+\node[box,right=15mm of a] (b) {出力};
+\node[box,below=of b] (c) {帰還回路$\beta$};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);
+\draw[-{Stealth}] (c)-| (a);
+}
+\section{LC共振の計算}
+\[
+ C_{\rm eq}=\left(C_1^{-1}+C_2^{-1}+C_3^{-1}\right)^{-1},
+ \qquad f_0=(2\pi\sqrt{LC_{\rm eq}})^{-1}.
+\]
+\textbf{例題：}$L=1\,\mathrm{mH}$、各$C=0.01\,\mu\mathrm{F}$なら
+$C_{\rm eq}=3.333\,\mathrm{nF}$、$f_0\simeq87.2\,\mathrm{kHz}$となる。
+Lを4倍にすると周波数は半分となる。
+$C_3$のみを十分小さくすると$C_{\rm eq}\simeq C_3$となり、他の容量や寄生容量の影響を抑えやすい。
+\clearpage
+\section{測定の前提}
+リサージュ図は2信号の周波数比と位相関係を表す。まず同じ周波数に合わせると閉じた楕円等が静止する。複雑な図では周波数の上下関係を取り違えないよう、既知の基準と比較する。
+周波数計も、トリガレベルや波形のひずみで誤計数し得る。
+\section{Fパラメータの整理}
+資料の電流方向の定義に従って
+\[
+ \begin{bmatrix}V_i\\I_i\end{bmatrix}
+ =F\begin{bmatrix}V_o\\I_o\end{bmatrix}
+\]
+と書く。増幅回路と帰還回路の接続条件を同じ方向規約で整理すると、非零の電圧・電流が存在する条件は係数行列の行列式が零になることである。
+自分の回路図に電流の矢印を描いてから式を立てる。
+\section{確認問題}
+\begin{enumerate}
+\item 同じ値Cのコンデンサ3個の直列合成容量を求める。\answerline
+\item 上記例題で各容量を10倍にすると周波数は何倍になるか。\answerline
+\item 理論$100\,\mathrm{kHz}$、実測$95\,\mathrm{kHz}$の相対誤差を求める。\answerline
+\item 出力端子にプローブを接続すると周波数が変化する理由を挙げる。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) $C/3$。(2) $1/\sqrt{10}\simeq0.316$倍。(3) $-5\,\%$。
+(4) プローブの入力容量・抵抗が共振条件や負荷を変えるため。
+\prelabclosing
+\end{document}
+

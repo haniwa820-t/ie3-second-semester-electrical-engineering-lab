@@ -1,0 +1,135 @@
+% Shared preamble for all LuaLaTeX lab documents.
+\usepackage{luatexja-fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{Latin Modern Mono}
+\setmainjfont[BoldFont=HaranoAjiGothic-Medium]{HaranoAjiMincho-Regular}
+\setsansjfont[BoldFont=HaranoAjiGothic-Bold]{HaranoAjiGothic-Medium}
+\usepackage[top=22mm,bottom=22mm,left=23mm,right=23mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array,longtable,tabularx}
+\usepackage{graphicx,xcolor,tikz,circuitikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{enumitem,fancyhdr,listings}
+\usepackage[unicode,hidelinks]{hyperref}
+\usepackage{bookmark}
+\definecolor{labblue}{RGB}{24,62,96}
+\definecolor{labgray}{gray}{0.95}
+\setlength{\parindent}{1\zw}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.35}
+\setlist{itemsep=3pt,topsep=4pt,leftmargin=2\zw}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small IE3 後期・電子工学実験}
+\fancyhead[R]{\small テーマ\LabCode}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{16pt}
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+  breaklines=true,frame=single,backgroundcolor=\color{labgray},
+  numbers=left,numberstyle=\tiny,showstringspaces=false,aboveskip=8pt,belowskip=8pt}
+\newcommand{\blank}{\rule{22mm}{0.3pt}}
+\newcommand{\answerline}{\par\noindent\rule{\linewidth}{0.25pt}\par}
+\newcommand{\writing}[1]{\par\noindent\fbox{\parbox[c][#1][t]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\vspace{2mm}\noindent\strut\hfill\par}}\par}
+\newcommand{\hint}[1]{\par\smallskip\noindent{\sffamily\color{labblue}記述の視点：}#1\par}
+\newcommand{\note}[1]{\par\smallskip\noindent\fbox{\parbox{0.95\linewidth}{#1}}\par\smallskip}
+\newcommand{\eqerror}{\varepsilon=\frac{x_{\mathrm{meas}}-x_{\mathrm{th}}}{x_{\mathrm{th}}}\times100\ \%}
+\newcommand{\LabSource}{徳山工業高等専門学校 情報電子工学科，
+  『2026年度 電子工学実験（3年後期）テキスト』，テーマ\LabCode，
+  \expandafter\path\expandafter{\SourcePdf}。}
+\newcommand{\reportcover}{
+  \hypersetup{pageanchor=false}
+  \begin{titlepage}\thispagestyle{empty}
+  \begin{center}
+    \vspace*{8mm}
+    {\Large\sffamily 情報電子工学実験}\\[7mm]
+    {\Huge\sffamily 実験報告書}\\[9mm]
+    {\Large \LabCode\quad\LabTitle}\\[5mm]
+    {\small 目的・原理・手順は事前整理済み／測定と考察は実験後に記入}
+  \end{center}
+  \vspace{12mm}
+  \par\noindent\begin{tabularx}{\linewidth}{p{32mm}Y}
+    実験年月日 & \blank 年\quad\blank 月\quad\blank 日\\[3mm]
+    提出期限 & \blank 年\quad\blank 月\quad\blank 日\\[3mm]
+    提出年月日 & \blank 年\quad\blank 月\quad\blank 日\\[3mm]
+    天候・気温・湿度 & \blank\quad\blank\ \({}^{\circ}\mathrm{C}\)\quad\blank\ \%\\[3mm]
+    学年・出席番号 & IE\quad\blank 年\quad\blank 番\\[3mm]
+    班番号 & 第\quad\blank 班\\[3mm]
+    氏名 & \rule{105mm}{0.3pt}\\[3mm]
+    共同実験者 & \rule{105mm}{0.3pt}\\[3mm]
+               & \rule{105mm}{0.3pt}
+  \end{tabularx}
+  \vfill
+  \par\noindent\begin{tabularx}{\linewidth}{|C{25mm}|C{25mm}|Y|}
+    \hline 受付 & 合格 & メッセージ\\\hline
+    \rule{0pt}{24mm} & & \\\hline
+  \end{tabularx}
+  \vspace{10mm}
+  \begin{center}徳山工業高等専門学校\\情報電子工学科\end{center}
+  \end{titlepage}
+  \setcounter{page}{1}\hypersetup{pageanchor=true}
+}
+\newcommand{\reflection}{
+  \section*{実験前後の記録・提出チェック}
+  \noindent 実験前の疑問点・座学との関連（具体的な式・回路・資料ページ）：
+  \writing{25mm}
+  \noindent 回答・確認した内容／回答者・確認日：
+  \writing{20mm}
+  \noindent 実験で実際に担当した作業、変更した条件：
+  \writing{20mm}
+  \noindent 提出前に確認し、該当する本文ページを記入する。
+  \par\noindent\begin{tabularx}{\linewidth}{p{9mm}Yp{25mm}}
+  \toprule 確認 & 項目 & 本文ページ\\\midrule
+  $\square$ & 目的・原理・装置・方法・全測定結果を記載した & \\
+  $\square$ & 図は下、表は上に番号と題名を付け、本文で引用した & \\
+  $\square$ & グラフの軸、単位、凡例、測定条件を示した & \\
+  $\square$ & 計算値と実測値を区別し、誤差・原因を検討した & \\
+  $\square$ & 全課題に答え、引用した資料を参考文献に示した & \\
+  $\square$ & 感想、共同実験者、提出日を記載した & \\\bottomrule
+  \end{tabularx}
+  \note{このシートは見本の振り返り・セルフチェックの構成を参考にした記録欄である。
+  正式な採点票や提出用表紙が別途指定された場合は、授業の指定様式を使用する。}
+  \clearpage
+}
+\newcommand{\prelabtitle}{
+  \begin{center}
+  {\Large\sffamily\color{labblue}予習・前提知識プリント}\\[3mm]
+  {\LARGE\sffamily \LabCode\quad\LabTitle}\\[3mm]
+  氏名：\blank\qquad 班：\blank\qquad 予習日：\blank
+  \end{center}
+  \note{「理論から予想した値」と「実験で観測した値」を区別する。
+  本プリントの例題は計算練習であり、実験結果を示すものではない。}
+}
+\newcommand{\reportclosing}[1]{
+  \clearpage
+  \section{結論・感想}
+  \hint{#1 得られた事実と推測を分け、目的に対する結論を自分の言葉で述べる。}
+  \writing{22mm}
+  \noindent 感想・改善案・次に確かめたいこと：
+  \writing{16mm}
+  \section*{参考文献}
+  \begin{enumerate}
+    \item \LabSource
+    \item 使用したデータシート・書籍・ウェブ資料（著者、題名、該当箇所、URL、参照日）を追加する。
+  \end{enumerate}
+}
+\newcommand{\prelabclosing}{
+  \section*{準備・出典}
+  \begin{itemize}[nosep]
+    \item 資料、筆記具、記録用紙、電卓と、実験条件・機器設定の記録欄。
+    \item 確認問題の解答と、解けなかった点への具体的な質問。
+  \end{itemize}
+  {\small\noindent\LabSource\par}
+}
+\newcommand{\simpleflow}[1]{
+  \begin{center}
+  \begin{tikzpicture}[node distance=5mm and 5mm,
+      every node/.style={font=\small},box/.style={draw,rounded corners=1mm,
+      align=center,minimum height=10mm,text width=30mm}]
+    #1
+  \end{tikzpicture}
+  \end{center}
+}

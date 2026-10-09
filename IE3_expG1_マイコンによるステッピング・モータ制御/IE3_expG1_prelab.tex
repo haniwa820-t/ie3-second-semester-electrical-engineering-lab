@@ -1,0 +1,50 @@
+% !TEX root = IE3_expG1_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{G1}
+\newcommand{\LabTitle}{マイコンによるステッピング・モータ制御}
+\newcommand{\SourcePdf}{IE3_expG1_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{ステッピング・モータの前提}
+励磁を一つ進めると一定角度だけ回る。1相励磁は一つの相を、1--2相励磁は一相と二相を交互に励磁する。資料にある原理説明用の角度を、使用モータの実測ステップ角と取り違えない。
+\section{ビットと出力順序}
+資料の配線は$D_0=A,D_2=B,D_1=\overline A,D_3=\overline B$であり、単純なビット順に相を並べると回転順序が変わる。
+\par\noindent\begin{tabularx}{\linewidth}{lY}
+\toprule 方式 & 16進コード\\\midrule
+1相 & 01 $\to$ 04 $\to$ 02 $\to$ 08 $\to$ 01\\
+1--2相 & 01 $\to$ 05 $\to$ 04 $\to$ 06 $\to$ 02 $\to$ 0A $\to$ 08 $\to$ 09 $\to$ 01\\\bottomrule
+\end{tabularx}
+例：05hは00000101で、AとBを同時に励磁する。逆転は状態列を逆順にたどる。
+\section{回転数と遷移数}
+\[
+ \theta=\frac{360^\circ}{N},\qquad n_{90}=\frac N4,\qquad
+ \text{回転速度[rpm]}=\frac{60}{N\,T_s}.
+\]
+仮に1相でN=200、$T_s=5\,\mathrm{ms}$なら1.8度/遷移、90度は50遷移、60 rpm。
+1--2相でN=400なら0.9度、90度は100遷移となる。これらは説明例で、実際のNは確認する。
+\clearpage
+\section{プログラム設計の注意}
+\simpleflow{
+\node[box] (a) {初期状態を出力};
+\node[box,right=of a] (b) {次状態を出力\\待ち時間};
+\node[box,right=of b] (c) {遷移数を更新};
+\node[box,right=of c] (d) {指定数で停止};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);\draw[-{Stealth}] (c)--(d);
+}
+初期状態を設定した時点を基準位置にする。サンプルのサブルーチンが4状態をまとめて進めるなら、CALL回数とステップ遷移数を区別する。
+待ち時間を急に短くすると回転子が追従できなくなることがある。
+\section{確認問題}
+\begin{enumerate}
+\item 0Ahで励磁される二つの相を答える。\answerline
+\item 1相で一周48遷移だった場合の90度の遷移数を求める。\answerline
+\item 一回のCALLで4遷移進む場合、上の90度には何CALL必要か。\answerline
+\item 1--2相の09hの次に順方向で出力するコードを答える。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) $\overline A,\overline B$。(2) 12遷移。(3) 3 CALL（初期設定と終了状態を別途確認）。
+(4) 01h。
+\section*{準備する記録}
+配線対応表、励磁列、方向、90度に必要な回数、遅延ループ、実際の角度、脱調した条件をノートに用意する。
+\prelabclosing
+\end{document}

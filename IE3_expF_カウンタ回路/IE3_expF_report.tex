@@ -1,0 +1,64 @@
+% !TEX root = IE3_expF_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{F}
+\newcommand{\LabTitle}{カウンタ回路}
+\newcommand{\SourcePdf}{IE3_expF_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+カウンタ、デコーダ、7セグメント表示器と555のクロックを用いて24時間時計を構成し、分周・桁上げ・リセットの仕組みを理解する。
+\section{原理}
+時計の各桁は、秒・分の一の位が10進、十の位が6進、時が00〜23の循環となる。
+7490は内部の2分周と5分周を接続して10進にする。7492は2分周と6分周を持ち、全体を接続すると12分周であるため、6進に使う部分と入力端子を資料で確認する。
+各カウンタの規定のエッジで計数し、桁上げ信号を次段へ送る。
+時の一の位4と十の位2を検出して24を零に戻す。
+\[
+ f_{\rm clock}\simeq\frac1{0.693(R_A+2R_B)C}
+\]
+は555非安定回路の近似である。
+\simpleflow{
+\node[box] (a) {555\\約1 Hz};
+\node[box,right=of a] (b) {秒\\10進・6進};
+\node[box,right=of b] (c) {分\\10進・6進};
+\node[box,right=of c] (d) {時\\24進};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);\draw[-{Stealth}] (c)--(d);
+}
+\section{装置・方法}
+\begin{enumerate}
+\item 555クロックと手動リセットを先に確認する。電源、ICの方向、リセット入力の初期状態を確認する。
+\item 一桁ずつカウンタ、デコーダ、表示器を配線し、0〜9または0〜5の循環を確認する。
+\item 資料指定の桁上げ端子を接続する。10進は$Q_D$、6進は$Q_C$の波形と次段の計数エッジを確認する。
+\item 時の24検出と手動リセットを接続し、全桁が零になることを確認する。
+\item 通常クロックで動作させた後、指定の加速試験により分・時・24時の境界を確認する。
+\end{enumerate}
+実際のIC型番・回路図・555のR、C・クロック周期：
+\writing{22mm}
+\clearpage
+\section{結果}
+表1：各段の分周確認。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 段 & 使用IC・入力 & 表示範囲 & 桁上げ波形・周期\\\midrule
+秒一の位&&&\\秒十の位&&&\\分一の位&&&\\分十の位&&&\\時&&&\\\bottomrule
+\end{tabularx}
+表2：境界動作。予想値と観測値を区別する。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 試験直前 & 予想される次表示 & 観測した表示 & 試験条件\\\midrule
+00:00:09 &00:00:10&&\\00:00:59&00:01:00&&\\
+00:59:59&01:00:00&&\\23:59:59&00:00:00&&\\
+手動リセット&00:00:00&&\\\bottomrule
+\end{tabularx}
+図1：7490、7492の各出力と桁上げのタイミング図。資料の計数順序を確認する。
+\writing{45mm}
+図2：24検出、手動リセット、各桁の接続を含む回路図（別紙追加可）。
+\writing{40mm}
+\section{考察・課題}
+\begin{enumerate}
+\item 各カウンタの入力と出力の周波数関係を、タイミング図で説明する。
+\item 24でリセットする論理と、短いリセットパルス・伝搬遅延の影響を説明する。
+\item 実測のクロック周波数とR、Cによる計算値を比較し、約1 Hzになる抵抗を設計する。
+\item 作業で発生した誤配線や表示異常、その発見方法と改善案を記す。
+\end{enumerate}
+\writing{25mm}
+\reportclosing{時計の分周比と24時間動作の確認結果をまとめる。}
+\end{document}

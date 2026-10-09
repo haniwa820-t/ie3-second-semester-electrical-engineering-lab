@@ -1,0 +1,66 @@
+% !TEX root = IE3_expE_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{E}
+\newcommand{\LabTitle}{マルチバイブレータ}
+\newcommand{\SourcePdf}{IE3_expE_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+トランジスタおよび555タイマによる非安定・単安定マルチバイブレータを動作させ、コンデンサの充放電と状態遷移の対応を確かめる。
+\section{原理}
+非安定回路は二状態を繰り返し、単安定回路はトリガ後に一定時間だけ状態を変えて元に戻る。
+離散トランジスタ回路の近似時間は
+\[
+ T_1\simeq0.69C_1R_{B1},\quad T_2\simeq0.69C_2R_{B2},
+ \quad T=T_1+T_2
+\]
+である。555では内部の$V_{CC}/3$と$2V_{CC}/3$のしきい値を用い、
+\[
+ t_H=\ln2(R_A+R_B)C,\quad t_L=\ln2R_BC,\quad
+ f=\frac1{t_H+t_L},\quad t_{\rm mono}=\ln3R_AC
+\]
+となる。
+\section{装置・条件}
+トランジスタ非安定：$V_{CC}=10\,\mathrm{V}$。
+単安定：$V_{CC}=+10\,\mathrm{V},V_{BB}=-10\,\mathrm{V}$。
+555：$V_{CC}=5\,\mathrm{V}$。実際の素子定数と機器設定を記録する。
+\writing{16mm}
+\section{方法}
+\begin{enumerate}
+\item 非安定トランジスタ回路を組み、指定4点の波形を共通の基準波形と対比する。周期と各状態の持続時間を測る。
+\item 単安定回路を組み、無入力時の安定状態を確認する。矩形波$10\,\mathrm{V_{pp}}$、オフセット$5\,\mathrm{V}$を与え、入力・微分波形を含む指定6点を観測する。
+\item 555非安定回路で$R_A=5\,\mathrm{k}\Omega,R_B=3\,\mathrm{k}\Omega,C=0.1\,\mu\mathrm{F}$とし、高・低時間、周期を測る。
+\item 555単安定回路で$R_A=5.6\,\mathrm{k}\Omega,C=0.1\,\mu\mathrm{F}$とし、資料指定の$1\,\mathrm{kHz}$、デューティ80\%のトリガを与える。実際の高・低電圧を記録する。
+\item 電源を切って$R_A$を$10\,\mathrm{k}\Omega$可変抵抗に変更し、パルス幅の変化を調べる。
+\end{enumerate}
+\clearpage
+\section{結果}
+表1：時間特性。理論欄は使用した実際の素子値で計算する。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule 回路 & 項目 & 理論/ms & 実測/ms & 誤差/\%\\\midrule
+離散非安定 &$T_1$&&&\\ &$T_2$&&&\\ &$T$&&&\\
+離散単安定 &幅&&&\\555非安定 &$t_H$&&&\\ &$t_L$&&&\\ &$T$&&&\\
+555単安定 &幅&&&\\\bottomrule
+\end{tabularx}
+図1：離散非安定の4点、単安定の6点の波形（同一時間軸の図を別紙に追加する）。
+\writing{40mm}
+図2：555非安定・単安定の出力とコンデンサ電圧。しきい値を示す。
+\writing{35mm}
+\clearpage
+表2：可変抵抗と単安定パルス幅。
+\par\noindent\begin{tabularx}{\linewidth}{YYY}
+\toprule 実際の$R_A$/$\mathrm{k}\Omega$ & 理論幅/ms & 実測幅/ms\\\midrule
+&&\\&&\\&&\\&&\\\bottomrule
+\end{tabularx}
+\section{考察・課題}
+\begin{enumerate}
+\item 各波形の立上り・立下りと、トランジスタのON/OFF、コンデンサ電圧の変化を対応させる。
+\item 微分回路とスピードアップ用コンデンサの役割を説明する。保護ダイオードの働きも回路から検討する。
+\item $R_{B1}=R_{B2}=75\,\mathrm{k}\Omega,T_1=1\,\mathrm{ms},T_2=0.5\,\mathrm{ms}$を実現する容量を計算する。
+\item 比較器、ラッチ、放電トランジスタを使って555の動作を説明し、$\ln2,\ln3$の由来を充放電式から示す。
+\item 抵抗・容量誤差、トリガ幅、測定点の負荷が時間に及ぼす影響を述べる。
+\end{enumerate}
+\writing{35mm}
+\reportclosing{非安定と単安定の違い、RC時定数と出力時間の関係を要約する。}
+\end{document}

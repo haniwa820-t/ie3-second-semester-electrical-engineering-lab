@@ -1,0 +1,60 @@
+% !TEX root = IE3_expG1_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{G1}
+\newcommand{\LabTitle}{マイコンによるステッピング・モータ制御}
+\newcommand{\SourcePdf}{IE3_expG1_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+TeCからステッピング・モータの励磁を制御し、1相励磁と1--2相励磁の回転方向、ステップ角、速度の違いを理解する。90度回転と逆転を行うプログラムを作成する。
+\section{原理}
+コイルの励磁位置を順に移すと回転子がステップ単位で移動する。資料の配線は
+$D_0=A,D_2=B,D_1=\overline A,D_3=\overline B$である。
+\par\noindent\begin{tabularx}{\linewidth}{lY}
+\toprule 方式 & 出力コード（16進、順方向の例）\\\midrule
+1相 & 01, 04, 02, 08\\
+1--2相 & 01, 05, 04, 06, 02, 0A, 08, 09\\\bottomrule
+\end{tabularx}
+逆方向は励磁順序を逆にする。一周に要するステップ遷移数をNとすると$\theta=360^\circ/N$、90度には$N/4$遷移が必要となる。
+1--2相では同じモータの角度刻みがおよそ半分となる。
+\section{装置・設定}
+TeC、モータ・LEDボード、接続ケーブル、BYOD用PC、資料指定のアセンブラを使用する。
+\texttt{OUT 07h}で$D_7$〜$D_0$を出力し、\texttt{0Ch}の上位ビットを1として指定方向に設定する。
+モータ型番、励磁配線、一周の実測遷移数、使用ソフトを記録する。
+\writing{18mm}
+\section{方法}
+\begin{enumerate}
+\item 電源OFFでケーブルを接続し、資料指定の電源LED・配線を確認する。通電中の抜差し、軸を手で回す操作を避ける。
+\item サンプルを読み、1相励磁を約0.5秒間隔で動作させる。励磁順序と回転方向を確認する。
+\item 回転を観察して一周に必要な遷移数を求める。遅延を減らし、脱調の有無を調べる。
+\item 1--2相励磁を作成し、同じ確認を行う。90度回転と90度逆転を両方式で作成する。
+\item 資料指定の各リストファイルを添付し、待ち時間、繰返し回数、終了時の励磁状態を説明する。
+\end{enumerate}
+\clearpage
+\section{結果}
+表1：励磁方式と回転。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule 方式 & 一周遷移数N & ステップ角/度 & 90度遷移数 & 回転方向\\\midrule
+1相&&&&\\1--2相&&&&\\\bottomrule
+\end{tabularx}
+表2：パルス間隔と動作。脱調は観察した条件を記す。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 方式 & 間隔/ms & 動作・速度 & 脱調・備考\\\midrule
+&&&\\&&&\\&&&\\&&&\\\bottomrule
+\end{tabularx}
+図1：励磁状態の時系列とプログラムの流れ。
+\writing{35mm}
+プログラムの添付：1相90度、1相逆90度、1--2相90度、1--2相逆90度のソースとリスト。
+\writing{20mm}
+\clearpage
+\section{考察・課題}
+\begin{enumerate}
+\item 1相と1--2相の角度、励磁数、動作の違いを説明する。
+\item 90度の遷移数を計算し、初期励磁を一回の回転として数えていないか確認する。サブルーチン一回で進む遷移数も示す。
+\item 間隔を短くしたときに脱調する理由を、慣性、負荷、加速の観点から述べる。
+\item 回転を止めた後の励磁状態と保持の関係を検討する。
+\end{enumerate}
+\writing{30mm}
+\reportclosing{プログラムと実際の角度・方向の対応をまとめる。}
+\end{document}

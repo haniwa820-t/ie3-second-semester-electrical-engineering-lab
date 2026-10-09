@@ -1,0 +1,84 @@
+% !TEX root = IE3_expJ_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{J}
+\newcommand{\LabTitle}{PLCによるシーケンス制御}
+\newcommand{\SourcePdf}{IE3_expJ_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+PLCで接点論理、自己保持、内部リレー、タイマ、カウンタを実装し、ラダー図と入出力の対応を理解する。ベルトコンベヤ等のシーケンスを確認する。
+\section{原理}
+PLCは入力を取り込み、ラダープログラムを順に実行し、出力を更新する処理を繰り返す。
+ラダーのa接点はビットが1なら成立、b接点は0なら成立する。
+物理スイッチのNO/NCとプログラムのa/bを区別する。
+自己保持では出力や内部リレーの接点を使って過去の操作を保持する。
+停止優先の自己保持は
+\[
+ Q_{\rm next}=(S\lor Q_{\rm prev})\land\lnot R
+\]
+と表せる。開始と停止が同時に成立する場合も検討する。
+\section{装置・割付}
+OMRON CP1L-L14DR-D、CX-Programmer、24 V電源、スイッチ、ランプ、ベルトコンベヤを使用する。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 入力 & アドレス & 出力 & アドレス\\\midrule
+SW1（a）&0.00&L1&100.00\\SW2（a）&0.01&L2&100.01\\
+SW3（a）&0.02&L3&100.02\\SW4（b）&0.03&ベルト&100.03\\\bottomrule
+\end{tabularx}
+実際の配線図、端子COM、ソフト版、機器番号：
+\writing{18mm}
+\section{方法}
+\begin{enumerate}
+\item 電源OFFで配線し、指定の線色（赤24 V、青GND、黄その他）と端子を確認する。一端子に2本を超えて接続しない。
+\item OnOffで物理a/bスイッチとラダーa/b接点の4組を試す。LogicでAND、OR、NOTを試す。
+\item Parking1/2で3車室の満車表示L3と、一つ以上空きがある表示L1を実現する。
+\item 基本の自己保持を確認し、SW1で起動、SW2で停止するSelfHoldingを作る。
+\item IntRelayでSW1・SW2の操作履歴を内部リレーに保持し、両方の操作後にベルトを動かす。SW3で全履歴を解除する。
+\item TimerでSW1操作から3秒後に動作し、途中のSW2で取消す。CounterでSW1を3回操作すると動作し、SW2でリセットする。
+\end{enumerate}
+\clearpage
+\section{結果}
+表1：物理接点とプログラム接点。操作前後の入力ビットと出力を記す。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 物理接点 & ラダー接点 & 非操作時 & 操作時\\\midrule
+a&a&&\\a&b&&\\b&a&&\\b&b&&\\\bottomrule
+\end{tabularx}
+表2：論理と駐車場。1は入力ビットON。L1は少なくとも一室空き、L3は満車。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule SW1 & SW2 & SW3 & L1観測 & L3観測\\\midrule
+0&0&0&&\\0&0&1&&\\0&1&0&&\\0&1&1&&\\
+1&0&0&&\\1&0&1&&\\1&1&0&&\\1&1&1&&\\\bottomrule
+\end{tabularx}
+表3：AND/OR/NOTの理論と観測（必要に応じ列を増やす）。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 入力A,B & AND観測 & OR観測 & NOT A観測\\\midrule
+0,0&&&\\0,1&&&\\1,0&&&\\1,1&&&\\\bottomrule
+\end{tabularx}
+\clearpage
+表4：シーケンスの境界試験。
+\par\noindent\begin{tabularx}{\linewidth}{YYY}
+\toprule プログラム・操作 & 期待動作 & 観測結果\\\midrule
+自己保持：起動後に手を離す&運転継続&\\
+自己保持：停止／同時入力&停止優先を確認&\\
+内部リレー：SW2→SW1&両履歴成立後に運転&\\
+内部リレー：SW3&運転と履歴解除&\\
+タイマ：SW1後3秒&動作&\\
+タイマ：3秒未満でSW2&取消し&\\
+カウンタ：1、2、3回&3回目に動作&\\
+カウンタ：SW2&計数リセット&\\\bottomrule
+\end{tabularx}
+図1：各プログラムのラダー図とオンラインモニタ画面（別紙追加可）。
+\writing{42mm}
+図2：自己保持、タイマ、カウンタの入力・出力時系列。
+\writing{35mm}
+\section{考察・課題}
+\begin{enumerate}
+\item 自己保持が記憶として働く理由と、内部リレーを用いる意味を説明する。
+\item 停止接点の位置を変えた場合の同時入力を比較し、停止優先と開始優先を論理式で示す。
+\item TIMの設定\texttt{\#30}（0.1秒単位）とCNTの\texttt{\#3}を説明する。連続ONと3回のエッジを区別する。
+\item スキャン周期、実行順序、同一コイルへの重複書込みが動作に与える影響を述べる。
+\item 応用課題を実施した場合は信号機などの仕様・ラダー・確認表を追加する。
+\end{enumerate}
+\writing{22mm}
+\reportclosing{接点論理から時間・回数制御までの確認結果をまとめる。}
+\end{document}

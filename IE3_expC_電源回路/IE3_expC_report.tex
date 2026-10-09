@@ -1,0 +1,69 @@
+% !TEX root = IE3_expC_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{C}
+\newcommand{\LabTitle}{電源回路}
+\newcommand{\SourcePdf}{IE3_expC_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+半波・全波整流およびコンデンサ入力形・チョーク入力形の平滑回路を比較し、負荷電流による直流出力、リプル、充電電流の変化を調べる。
+\section{原理}
+ダイオードで交流を一方向の電流にし、平滑回路で脈動を小さくする。
+半波のリプル周波数は電源周波数$f$、全波では$2f$となる。
+コンデンサ入力形でリプルが小さいとき、
+\[
+ \Delta V_{\mathrm{pp}}\simeq\frac{I_L}{f_rC}
+\]
+と近似できる。資料でいうリプル電圧は波形の最大値と最小値の差の半分であり、$\Delta V_{\mathrm{pp}}/2$として整理する。
+チョーク入力形では直列インダクタが電流変動を抑えるが、負荷条件により特性が変わる。
+\simpleflow{
+\node[box] (a) {交流・変圧器};
+\node[box,right=of a] (b) {半波／全波\\整流};
+\node[box,right=of b] (c) {C入力／L入力\\平滑};
+\node[box,right=of c] (d) {負荷};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);\draw[-{Stealth}] (c)--(d);
+}
+\section{装置と条件}
+整流回路、平滑素子、負荷抵抗、直流電圧計、電流計、オシロスコープを使用する。
+素子定数、機器番号、プローブ倍率、電源周波数を記録する。
+\writing{15mm}
+\note{商用電源を含む装置である。電源を切って配線し、装置の指定された測定端子を使う。
+オシロスコープの接地端子を任意の回路点につながない。}
+\clearpage
+\section{方法}
+\begin{enumerate}
+\item 資料C-4〜C-9の指定回路を用い、半波・全波とC入力・チョーク入力の四条件を構成する。使用した回路を図示する。
+\item 負荷電流を$200,400,600,800\,\mathrm{mA},1\,\mathrm{A}$に合わせ、直流出力電圧を測定する。
+\item オシロスコープをAC結合としてリプル波形を読み、ピーク間値とその半分を記録する。
+\item $500\,\mathrm{mA}$と$1\,\mathrm{A}$で、整流・平滑に関係する波形とコンデンサ充電電流を記録する。
+\item 充電電流測定用$0.1\,\Omega$抵抗の電圧$v_s$から$i_C=v_s/(0.1\,\Omega)$を求める。CH1の入力波形をトリガに用い、CH2で観測点を変える。反転表示の有無も記す。
+\end{enumerate}
+\section{結果}
+表1：半波整流。リプル欄には半ピーク間値を記入する。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule $I_L$/mA & C入力$V_{\rm DC}$/V & Cリプル/V & L入力$V_{\rm DC}$/V & Lリプル/V\\\midrule
+200&&&&\\400&&&&\\600&&&&\\800&&&&\\1000&&&&\\\bottomrule
+\end{tabularx}
+表2：全波整流。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule $I_L$/mA & C入力$V_{\rm DC}$/V & Cリプル/V & L入力$V_{\rm DC}$/V & Lリプル/V\\\midrule
+200&&&&\\400&&&&\\600&&&&\\800&&&&\\1000&&&&\\\bottomrule
+\end{tabularx}
+\clearpage
+図1：$500\,\mathrm{mA}$時の四条件の波形（別紙を追加可）。縦軸・横軸、測定点、反転の有無を示す。
+\writing{38mm}
+図2：$1\,\mathrm{A}$時の波形および充電電流。
+\writing{38mm}
+図3：負荷電流と直流出力電圧／リプル電圧の比較グラフ。
+\writing{35mm}
+\section{考察・課題}
+\begin{enumerate}
+\item 半波と全波のリプル周波数・大きさを、充放電の時間間隔から説明する。
+\item C入力とチョーク入力の負荷特性を比較し、負荷増大時の出力変化を検討する。
+\item 出力電圧が最大になる条件と、ダイオードに大きな瞬時電流が流れる条件を波形で説明する。
+\item 充電電流波形と平滑コンデンサの電圧波形の時間的な対応を述べる。近似式の適用範囲も検討する。
+\end{enumerate}
+\writing{22mm}
+\reportclosing{四条件の出力電圧とリプルを比較し、適する負荷条件を述べる。}
+\end{document}

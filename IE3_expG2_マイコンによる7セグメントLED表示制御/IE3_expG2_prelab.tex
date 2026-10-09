@@ -1,0 +1,55 @@
+% !TEX root = IE3_expG2_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{G2}
+\newcommand{\LabTitle}{マイコンによる7セグメントLED表示制御}
+\newcommand{\SourcePdf}{IE3_expG2_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{数字とセグメント符号}
+数字2は整数02hであるが、LEDに数字2を表示する符号は5Bhである。配列から表引きして変換する。
+ビット0〜6がa〜g、ビット7が小数点hに対応する。
+\[
+ \text{表示コード}=\text{数字のコード}\ \mathrm{OR}\ 80h
+\]
+とすれば小数点を追加できる。
+資料の7は27hで、fを含む字形。07hで表示する形もあるが、実験では採用した字形を明記する。
+\section{桁選択の負論理}
+4桁すべて非選択の8Fhから、選びたい桁のビットを0にする。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule &左端&左から2&左から3&右端\\\midrule
+コード&8Eh&8Dh&8Bh&87h\\
+下位4ビット&1110&1101&1011&0111\\\bottomrule
+\end{tabularx}
+複数桁を異なる数字で表示するには、桁と符号を切り替える時分割表示が必要である。符号を変える前に全桁非選択にすると、切替え時の誤点灯を抑えやすい。
+\section{時間の計算}
+\[
+ t=\frac{N_{\rm states}}{2\,457\,600}.
+\]
+待ちサブルーチンだけでなく、呼出し・復帰、表示、加算、比較、条件分岐まで含める。
+同じループでも最後の分岐はステート数が異なる可能性がある。
+\clearpage
+\section{カウンタの設計}
+保持する数値を0〜9として更新し、10になったら0に戻す。セグメントのビット列を加算して数字を作ろうとしない。
+発展課題では、初期値、終了条件、更新間隔、桁あふれ、小数点の役割を先に決める。
+\simpleflow{
+\node[box] (a) {数値を保持};
+\node[box,right=of a] (b) {符号を表引き};
+\node[box,right=of b] (c) {桁選択・出力};
+\node[box,right=of c] (d) {待ち・数値更新};
+\draw[-{Stealth}] (a)--(b);\draw[-{Stealth}] (b)--(c);\draw[-{Stealth}] (c)--(d);
+}
+\section{確認問題}
+\begin{enumerate}
+\item 数字0の3Fhに小数点を付けると何hになるか。\answerline
+\item 右端のみを選ぶコードと、全桁を消すコードを答える。\answerline
+\item $1\,228\,800$ステートの処理時間を求める。\answerline
+\item 待ち処理を1秒に合わせた後に表示処理を追加すると、更新間隔はどうなるか。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) BFh。(2) 87h、8Fh。(3) 0.5秒。(4) 追加処理分だけ1秒より長くなる。
+\section*{設計・予習欄}
+発展課題の仕様と、通常状態・境界状態・終了状態の試験を三つ以上考える。
+\writing{26mm}
+\prelabclosing
+\end{document}

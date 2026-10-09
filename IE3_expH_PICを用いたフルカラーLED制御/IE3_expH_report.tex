@@ -1,0 +1,62 @@
+% !TEX root = IE3_expH_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{H}
+\newcommand{\LabTitle}{PICを用いたフルカラーLED制御}
+\newcommand{\SourcePdf}{IE3_expH_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+PIC12F683でフルカラーLEDの点灯・混色・PWM調光を行い、GPIOの論理、電流制限、プログラムと出力波形の関係を理解する。
+\section{原理}
+共通アノード型RGB LEDは、各カソードにつながる出力をLOWにすると点灯する。
+$GP0$が赤、$GP1$が緑、$GP2$が青である。
+抵抗の近似値は$R=(V_{CC}-V_F)/I_F$。
+PWMでは点灯時間の割合$D_{\rm on}=t_{\rm LOW}/T$を変えて平均電流を制御する。高レベルのデューティ比とは逆になる。
+\section{装置・設定}
+PIC12F683、LED実験ボード、PC、資料指定のMPLAB/コンパイラ、PICkit3、電源、オシロスコープを使用する。
+資料のプロジェクト設定を読み込み、書込み時の電源設定と動作時5 Vを区別する。
+内蔵発振器4 MHz、GPIO出力方向、ANSEL、比較器を設定する。GP3は入力専用である。
+実際のLED型番、抵抗値、開発環境、電源設定：
+\writing{16mm}
+\section{方法}
+\begin{enumerate}
+\item 電源OFFで装置を接続し、サンプル1を書き込む。赤・緑・青が2秒ごとに順次点灯することを確認する。
+\item GP2,GP1,GP0の全8組を出力し、資料の表H-2を観測結果で埋める。
+\item サンプル2の赤の5段階調光を確認する。青を1秒ごとに明るくし、最大後は1秒ごとに暗くするプログラムを作成する。
+\item 最大輝度と3段階目でGP2--GND間の電圧を観測し、周期とLOW時間を測定する。
+\item 赤$\to$黄$\to$緑$\to$水色$\to$青$\to$紫$\to$赤と変化するプログラムを作成する。各RGB色の間を約5段階で変化させる。
+\end{enumerate}
+LEDを直接見続けない。電流制限抵抗を省略せず、資料の機器操作に従う。
+\clearpage
+\section{結果}
+表1：ポート状態と混色。理論予想と観測を分ける。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule GP2 & GP1 & GP0 & 予想色 & 観測色\\\midrule
+0&0&0&&\\0&0&1&&\\0&1&0&&\\0&1&1&&\\
+1&0&0&&\\1&0&1&&\\1&1&0&&\\1&1&1&&\\\bottomrule
+\end{tabularx}
+表2：青のPWM調光。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 段階 & 周期/ms & LOW時間/ms & 点灯割合/\%\\\midrule
+消灯&&&\\1&&&\\2&&&\\3&&&\\4&&&\\最大&&&\\\bottomrule
+\end{tabularx}
+図1：最大と3段階目のGP2波形。電圧・時間・点灯区間を示す。
+\writing{38mm}
+図2：混色プログラムの流れ、RGB点灯割合の変化。
+\writing{30mm}
+\clearpage
+\section{プログラム添付}
+基本課題2および応用課題のソースを添付し、初期設定、PWM一周期、段階の保持時間、色の遷移を説明する。
+\writing{22mm}
+\section{考察・課題}
+\begin{enumerate}
+\item LEDの用途と型番・価格を調べ、販売元、調査日、個数条件、URLを示す。価格は調査した値を記す。
+\item 赤の$V_F=2.0\,\mathrm{V}$、緑・青$3.4\,\mathrm{V}$、電源5 V、20 mAという設計条件で抵抗を計算する。実装抵抗から実際の想定電流も求める。
+\item GPIOのソース／シンク動作を説明し、データシートの出力電流制限と実装条件を確認する。
+\item 定電流ダイオードの特徴、必要電圧、抵抗による電流制限との違いを説明する。
+\item PWMの周波数・点灯割合と観測した明るさの関係を説明する。色ごとの明るさの差も検討する。
+\end{enumerate}
+\writing{30mm}
+\reportclosing{負論理の点灯とPWM波形、混色プログラムの動作をまとめる。}
+\end{document}

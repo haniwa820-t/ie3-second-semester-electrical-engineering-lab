@@ -1,0 +1,64 @@
+% !TEX root = IE3_expG2_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{G2}
+\newcommand{\LabTitle}{マイコンによる7セグメントLED表示制御}
+\newcommand{\SourcePdf}{IE3_expG2_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+TeCで7セグメントLEDを制御し、セグメント符号、桁選択、プログラムによる時間生成を理解する。10秒カウンタと発展プログラムを作成する。
+\section{原理}
+セグメントは正論理で、07h出力のビット0〜7がa,b,c,d,e,f,g,h（小数点）に対応する。
+桁選択は負論理で、0Chの下位4ビットを用いる。
+\par\noindent\begin{tabularx}{\linewidth}{YYYYY}
+\toprule 桁 & 左端 & 左から2 & 左から3 & 右端\\\midrule
+選択コード &8Eh&8Dh&8Bh&87h\\\bottomrule
+\end{tabularx}
+全桁非選択は8Fhである。資料の数字0〜9の符号は
+\texttt{3F,06,5B,4F,66,6D,7D,27,7F,6F}。
+7の27hはfも点灯する形であり、一般的な07hとは字形が異なる。
+クロック$2.4576\,\mathrm{MHz}$では1秒に$2\,457\,600$ステートを要する。
+\section{装置・方法}
+TeC、4桁LEDボード、PC、アセンブラを使用する。配線変更は電源OFFで行う。
+\begin{enumerate}
+\item サンプルで数字と桁選択を確認する。右から0、1、2、3を表示するプログラムを作成する。
+\item 数値を0〜9へ更新し、表引きで表示符号を求める10秒カウンタを作成する。9の次は0に戻す。
+\item 初期化、出力、待ち、加算、比較、分岐を含むループ全体のステートを数え、約1秒の更新間隔にする。
+\item 資料の例または独自の発展課題を選ぶ。仕様を明記し、ソース・リスト・フローチャート・確認結果を添付する。
+\end{enumerate}
+使用機器、プログラム名、採用した発展課題：
+\writing{18mm}
+\clearpage
+\section{結果}
+表1：数字と表示確認。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 数字 & 設計コード & 実表示・桁 & 相違・修正\\\midrule
+0&&&\\1&&&\\2&&&\\3&&&\\4&&&\\5&&&\\6&&&\\7&&&\\8&&&\\9&&&\\\bottomrule
+\end{tabularx}
+表2：時間計算。最終回の分岐が異なる場合は行を分ける。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 命令・処理 & 実行回数 & 1回のステート & 合計\\\midrule
+表示更新&&&\\待ちループ&&&\\加算・判定&&&\\通常分岐&&&\\最終分岐&&&\\合計&&&\\\bottomrule
+\end{tabularx}
+理論更新時間：\blank s。実測更新時間・測定法：\blank
+\clearpage
+図1：10秒カウンタおよび発展課題のフローチャート。
+\writing{40mm}
+表3：発展課題の確認。例として小数点の0.5秒点滅、16/20/60/256秒カウンタ、カウントダウン、メッセージ表示などから選ぶ。
+\par\noindent\begin{tabularx}{\linewidth}{YYY}
+\toprule 入力・時刻・境界 & 期待動作 & 観測結果\\\midrule
+&&\\&&\\&&\\&&\\\bottomrule
+\end{tabularx}
+ソースと.lstの添付先：
+\writing{15mm}
+\section{考察・課題}
+\begin{enumerate}
+\item 数字そのものと7セグメント符号を分ける必要を説明する。
+\item ループ全体を数えた時間と実測時間を比較し、分岐・出力処理の影響を述べる。
+\item 実験Fのハードウェア時計とソフトウェアによる時間生成を比較する。
+\item 発展課題の工夫、境界試験、残った問題を述べる。参考にしたコードがあれば出典を記す。
+\end{enumerate}
+\writing{25mm}
+\reportclosing{表示と計時を実現した方法と確認結果をまとめる。}
+\end{document}

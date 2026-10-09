@@ -1,0 +1,58 @@
+% !TEX root = IE3_expC_prelab.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{C}
+\newcommand{\LabTitle}{電源回路}
+\newcommand{\SourcePdf}{IE3_expC_A4.pdf}
+\begin{document}
+\prelabtitle
+\section{整流と平滑の前提}
+ダイオードは順方向に電流を流し、逆方向を遮断する。実素子には順方向電圧降下がある。
+半波整流は交流の一方の半周期を使い、ブリッジ全波整流は両半周期を同じ極性の出力にする。
+\[
+ f_{r,\mathrm{half}}=f,\qquad f_{r,\mathrm{full}}=2f.
+\]
+C入力ではコンデンサが波形の山付近で充電され、山の間は負荷に放電する。
+L入力ではインダクタが急な電流変化を抑える。
+\[
+ q=CV,\quad i_C=C\frac{dV_C}{dt},\quad v_L=L\frac{di_L}{dt}.
+\]
+\section{小リプル近似の例題}
+放電中の電流を一定$I_L$とし、放電時間を$1/f_r$とすると
+$\Delta V_{\mathrm{pp}}\simeq I_L/(f_rC)$となる。
+$C=470\,\mu\mathrm{F},I_L=20\,\mathrm{mA},f=60\,\mathrm{Hz}$の例では、
+\[
+ \Delta V_{\mathrm{pp,half}}\simeq0.709\,\mathrm{V},\qquad
+ \Delta V_{\mathrm{pp,full}}\simeq0.355\,\mathrm{V}.
+\]
+資料のリプル定義ではそれぞれ約$0.355\,\mathrm{V}$と$0.177\,\mathrm{V}$である。
+\note{これは理論例である。負荷が重く、充電時間や出力低下が無視できない場合は、この近似だけで実験結果を説明できない。}
+\section{回路を読む練習}
+資料の四回路に、整流素子、平滑素子、負荷、直流測定点、リプル測定点、電流検出抵抗を書き込む。
+\writing{35mm}
+\clearpage
+\section{オシロスコープの読み方}
+\begin{itemize}
+\item DC結合は直流成分を含む全波形を表示する。AC結合は直流成分を取り除くが、低周波では波形を変形させることもある。
+\item ピーク間値は$V_{\max}-V_{\min}$。実効値や半ピーク間値と区別する。
+\item 電流検出抵抗が$0.1\,\Omega$なら、$50\,\mathrm{mV}$は$0.50\,\mathrm{A}$に対応する。
+\item 波形には時間/div、電圧/div、プローブ倍率、結合方式、観測点、トリガ源を記録する。
+\end{itemize}
+充電電流は平均負荷電流と等しい波形ではない。短時間の大きな充電電流が、次の放電までの電荷を補う。
+\section{確認問題}
+\begin{enumerate}
+\item 電源$60\,\mathrm{Hz}$で半波と全波のリプル周波数を答える。\answerline
+\item 小リプル近似で負荷電流を2倍、容量を2倍にした場合をそれぞれ説明する。\answerline
+\item $0.1\,\Omega$の検出抵抗に$0.12\,\mathrm{V}$が生じた瞬間の電流を求める。\answerline
+\item 波形の最大値$12.8\,\mathrm{V}$、最小値$12.0\,\mathrm{V}$なら資料のリプル電圧はいくらか。\answerline
+\end{enumerate}
+\section*{解答の目安}
+(1) $60\,\mathrm{Hz},120\,\mathrm{Hz}$。
+(2) リプルはそれぞれ2倍、半分。
+(3) $1.2\,\mathrm{A}$。
+(4) $0.4\,\mathrm{V}$。
+\section*{実験前チェック}
+電源を切った状態で回路と接地を確認する。コンデンサの極性、耐圧、残留電荷に注意し、授業の装置操作手順に従う。
+\prelabclosing
+\end{document}
+

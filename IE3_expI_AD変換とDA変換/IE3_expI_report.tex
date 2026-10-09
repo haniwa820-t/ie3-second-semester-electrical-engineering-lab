@@ -1,0 +1,71 @@
+% !TEX root = IE3_expI_report.tex
+\documentclass[lualatex,a4paper,10pt]{jlreq}
+\input{../preamble.tex}
+\newcommand{\LabCode}{I}
+\newcommand{\LabTitle}{A/D変換とD/A変換}
+\newcommand{\SourcePdf}{IE3_expI_A4.pdf}
+\begin{document}
+\reportcover\reflection
+\section{目的}
+3ビットと8ビットのA/D・D/A変換を観測し、量子化、重み付け、サンプリング、サンプルホールドの動作を理解する。
+\section{原理}
+nビットの理想D/A変換は、フルスケール$V_{\rm FS}$と符号Dに対し
+\[
+ V_o=V_{\rm FS}\frac D{2^n},\quad
+ \mathrm{LSB}=\frac{V_{\rm FS}}{2^n},\quad 0\le D\le2^n-1
+\]
+となる。R--2Rラダーでは各ビットの寄与が1/2、1/4、…と重み付けされる。
+3ビットの資料回路は比較器とエンコーダによる並列比較形である。
+\note{資料中のADC0804の方式説明は補足が必要である。メーカー資料では8ビット逐次比較形ADCとされている。3ビットの並列比較回路と同一方式ではない。}
+帯域制限された信号の理想的な再構成には$f_s>2f_{\max}$が必要であり、これ以下では折返しが起こり得る。
+\section{装置・条件}
+3ビット回路：LM339、74LS148、R--2R（10 k$\Omega$/20 k$\Omega$）、LM358。
+8ビット回路：資料指定のADC/DACボード、9 V供給と内部5 V、基準2.5 V。DAC出力増幅を含む理想スケールは5 V。
+信号発振器、オシロスコープ、電圧計、実際の基準・電源値を記録する。
+\writing{16mm}
+\section{方法}
+\begin{enumerate}
+\item 3ビットADCの入力電圧と符号を調べ、組み立てたR--2R DACの各符号の出力を測る。入力100 Hz、5 Vpp、オフセット2.5 Vの正弦波でも観測する。
+\item 8ビット回路で50 Hz、5 Vpp、オフセット2.5 Vのクロックを与え、指定符号とDAC出力を確認する。
+\item 入力50 Hzの正弦波、サンプリング500〜2500 Hzで変換波形を比較する。出力を基準としたトリガやSTOPを使い観測条件をそろえる。
+\item 110 Hz入力／80 Hzサンプリングを5周期程度記録する。50 Hz入力／60 Hzサンプリングも観測する。
+\item サンプルホールドで100 Hz正弦波と、50 Hz・デューティ20\%のパルスを用い、入力、パルス、保持出力を同じ時間軸で比較する。
+\end{enumerate}
+\clearpage
+\section{結果}
+表1：3ビット変換。ADCの入力範囲とDAC出力を区別する。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 符号D & ADC入力範囲/V & DAC理論/V & DAC実測/V\\\midrule
+0&&0&\\1&&0.625&\\2&&1.250&\\3&&1.875&\\
+4&&2.500&\\5&&3.125&\\6&&3.750&\\7&&4.375&\\\bottomrule
+\end{tabularx}
+表2：8ビット、5 Vスケールの理論と測定。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule 符号/16進 & 理論出力/V & 実測入力/V & 実測出力/V\\\midrule
+00&0&&\\01&0.01953&&\\02&0.03906&&\\04&0.07813&&\\
+08&0.15625&&\\10&0.31250&&\\20&0.62500&&\\
+40&1.25000&&\\80&2.50000&&\\FF&4.98047&&\\\bottomrule
+\end{tabularx}
+図1：3ビットおよび8ビットの入出力波形。
+\writing{38mm}
+\clearpage
+表3：入力50 Hzに対するサンプリング比較（観測した条件を追記する）。
+\par\noindent\begin{tabularx}{\linewidth}{YYYY}
+\toprule $f_s$/Hz & 1周期の標本数 & 出力波形の特徴 & 記録図\\\midrule
+500&&&\\1000&&&\\1500&&&\\2000&&&\\2500&&&\\60&&&\\\bottomrule
+\end{tabularx}
+図2：110 Hz／80 Hz、および50 Hz／60 Hzの折返し波形。
+\writing{38mm}
+図3：サンプルホールドの入力、パルス、出力（同一軸）。
+\writing{35mm}
+\section{考察・課題}
+\begin{enumerate}
+\item ADCの階段状特性と、3ビット・8ビットのLSBを説明する。最大符号が5 Vちょうどに達しない理由も示す。
+\item 重ねの理とテブナン等価を用いてR--2Rラダー各ビットの寄与を導く。
+\item 110 Hz／80 Hz、50 Hz／60 Hzの折返しを計算し、観測と比較する。
+\item 1周期10標本等の見やすさと、標本化定理による再構成の条件を区別する。
+\item サンプル区間と保持区間を示し、保持中の変化や誤差を検討する。
+\end{enumerate}
+\writing{25mm}
+\reportclosing{分解能、サンプリング周波数、保持動作による波形の変化をまとめる。}
+\end{document}
